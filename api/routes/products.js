@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Database = require('../../dbconnection');
 const db = new Database();
+// FIXME: this should not be here
 
 router.get('/', async (req, res, next) => {    
     try {
