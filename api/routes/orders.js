@@ -1,10 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET requests to /orders'
-    });
+const Database = require('../../dbconnection');
+const db = new Database();
+
+router.get('/', async (req, res, next) => {    
+    try {
+        const rows = await db.query('SELECT * FROM orders');
+        res.status(200).json({
+            res: rows
+        });
+    } catch (err) {
+        res.status(500).json({ err });
+    }
 });
 
 router.post('/', (req, res, next) => {

@@ -1,45 +1,72 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET requests to /products'
-    });
+const Database = require('../../dbconnection');
+const db = new Database();
+
+router.get('/', async (req, res, next) => {    
+    try {
+        const rows = await db.query('SELECT * FROM products');
+        res.status(200).json({
+            res: rows
+        });
+    } catch (err) {
+        res.status(500).json({ err });
+    }
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
     const product = {
         name: req.body.name,
         price: req.body.price
     }
-    res.status(201).json({
-        message: 'Handling POST requests to /products',
-        createdProduct: product
-    });
+    try {
+        const rows = await db.query('INSERT INTO products SET ?', product);
+        product.id = rows.insertId;
+        res.status(201).json({
+            createdProduct: product
+        });
+    } catch (err) {
+        res.status(500).json({ err });
+    }
 });
 
-router.get('/:productId', (req, res, next) => {
+router.get('/:productId', async (req, res, next) => {
     const id = req.params.productId;
-    res.status(200).json({
-        message: `Handling POST request to /products/${id}`
-    });
+    try {
+        const rows = await db.query('SELECT * FROM products where id = ?', id);
+        res.status(200).json({
+            res: rows
+        });
+    } catch (err) {
+        res.status(500).json({ err });
+    }
 });
 
-router.patch('/:productId', (req, res, next) => {
-    const id = req.params.productId;
-    res.status(200).json({
-        message: `Handling POST request to /products/${id}`
-    });
+router.patch('/:productId', async (req, res, next) => {
+    const updateProduct = {
+        name: req.body.name,
+        price: req.body.price
+    }
+    try {
+        await db.query('UPDATE products SET ? WHERE id = ?', [updateProduct, req.params.productId]);
+        updateProduct.id = req.param.productId;
+        res.status(201).json({ updateProduct });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ err: 'error trying to update this product' });
+    }
 });
 
 
-router.delete('/:productId', (req, res, next) => {
-    const id = req.params.productId;
-    res.status(200).json({
-        message: `Handling POST request to /products/${id}`
-    });
+router.delete('/:productId', async (req, res, next) => {
+    try {
+        await db.query('DELETE FROM products WHERE id = ?', req.params.productId);
+        res.status(201).json({ message: 'Successfully deleted!' });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ err: 'error trying to delete this product' });
+    }
 });
-
-
 
 module.exports = router;
