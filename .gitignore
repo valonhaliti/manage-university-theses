@@ -1,2 +1,15 @@
-node_modules
+### Node ###
+/node_modules
 nodemon.json
+# Optional npm cache directory
+.npm
+
+### Visual Studio Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### System Files ###
+*.DS_Store
