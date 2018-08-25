@@ -13,3 +13,6 @@ nodemon.json
 
 ### System Files ###
 *.DS_Store
+
+# Uploads
+uploads
