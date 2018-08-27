@@ -4,7 +4,7 @@ This Node.js application will be used by university staff and its students.
 - Get all theses (e.g. by a topic or from a range of dates, or some other conditions)
 - Compare theses
 - See what is trending in that university
-- Proffesors can manage the theses of students they are mentoring etc.
+- Professors can manage the theses of students they are mentoring etc.
 
 ## Implementation 
 - Node.js
