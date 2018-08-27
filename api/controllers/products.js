@@ -11,7 +11,7 @@ exports.products_create = asyncHandler(async (req, res, next) => {
     const rows = await db.query('INSERT INTO products SET ?;', product);
     product.id = rows.insertId;
     return res.status(201).json({ createdProduct: product });
-})
+});
 
 exports.products_get = asyncHandler(async (req, res, next) => {
     const id = req.params.productId;

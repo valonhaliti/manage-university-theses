@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
@@ -49,4 +50,5 @@ app.use((error, req, res, next) => {
 
 app.listen(port, () => console.log(`listening in ${port}`));
 
-
+// export for testing
+module.exports = app;
