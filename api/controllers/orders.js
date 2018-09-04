@@ -7,7 +7,7 @@ exports.orders_create = asyncHandler(async (req, res, next) => {
         productId: req.body.productId,
         quantity: req.body.quantity,
         is_deleted: 0
-    }
+    };
     const rows = await db.query('INSERT INTO orders SET ?;', order);
     order.id = rows.insertId;
     return res.status(201).json({ createdOrder: order });
@@ -29,7 +29,7 @@ exports.orders_update = asyncHandler(async (req, res, next) => {
         productId: req.body.productId,
         quantity: req.body.quantity,
         is_deleted: 0
-    }
+    };
     await db.query('UPDATE orders SET ? WHERE id = ?;', [updateOrder, req.params.orderId]);
     updateOrder.id = req.param.orderId;
     return res.status(201).json({ updateOrder });

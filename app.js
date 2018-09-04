@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/users');
-
+const thesisRoutes = require('./api/routes/thesis');
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
@@ -31,6 +31,7 @@ app.use((req, res, next) => {
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);
+app.use('/thesis', thesisRoutes);
 
 app.use((req, res, next) => {
     const error = new Error("not found");

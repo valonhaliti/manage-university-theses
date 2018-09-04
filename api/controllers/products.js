@@ -7,7 +7,7 @@ exports.products_create = asyncHandler(async (req, res, next) => {
         price: req.body.price,
         product_image: req.file.path,
         is_deleted: 0
-    }
+    };
     const rows = await db.query('INSERT INTO products SET ?;', product);
     product.id = rows.insertId;
     return res.status(201).json({ createdProduct: product });
