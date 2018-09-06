@@ -28,18 +28,4 @@ describe('Thesis', () => {
                 });
         });
     });
-
-    // describe('POST /products/2', () => {
-    //     it('should GET product with id 2', (done) => {
-    //         chai.request(app)
-    //             .get('/products/2')
-    //             .end((err, res) => {
-    //                 res.should.have.status(200)
-    //                 res.body.res.should.be.a('array');
-    //                 res.body.res[0].id.should.be.eql(2);
-    //                 done();
-    //             })
-    //     });
-    // });
-
 });
