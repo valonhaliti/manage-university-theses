@@ -11,3 +11,4 @@ This Node.js application will be used by university staff and its students.
 - - Express framework
 - MySQL
 - Mocha (for testing API)
+- Jest (front end testing)
