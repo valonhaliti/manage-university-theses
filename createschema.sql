@@ -3,14 +3,17 @@ USE manage_thesis;
 
 CREATE TABLE `user` (
 	`id` INT AUTO_INCREMENT NOT NULL,
-    `name` VARCHAR(64) NOT NULL,
+    `firstname` VARCHAR(64) NOT NULL,
     `lastname` VARCHAR(64) NOT NULL,
     `type` TINYINT NOT NULL,
     `email` VARCHAR(64) UNIQUE NOT NULL,
+    `password` VARCHAR(200) NOT NULL,
     `registration_year` int,
     `is_deleted` TINYINT NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`),
-    KEY `idx_user__type` (`type`)
+    KEY `idx_user__type` (`type`),
+    KEY `idx_user__email` (`email`)
+    
 );
 
 CREATE TABLE `thesis` (

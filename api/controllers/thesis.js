@@ -8,9 +8,6 @@ exports.thesis_create = asyncHandler(async (req, res, next) => {
         category: req.body.category,
         filepath: req.file.path
     };
-    console.log('create called');
-    console.log(thesis);
-
     const rows = await db.query('INSERT INTO thesis SET ?;', thesis);
     thesis.id = rows.insertId;
     return res.status(201).json({

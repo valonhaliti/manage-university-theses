@@ -17,10 +17,14 @@ exports.users_signup = asyncHandler(async (req, res, next) => {
     const hash = await bcrypt.hash(req.body.password, 10);
     const user = {
         email: req.body.email,
-        password: hash
+        password: hash,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        type: req.body.type,
+        registration_year: req.body.registration_year
     };
     try {
-        await db.query('INSERT INTO users SET ?;', user);
+        await db.query('INSERT INTO user SET ?;', user);
         return res.status(201).json({
             message: 'User created'
         });
@@ -42,7 +46,7 @@ exports.users_signup = asyncHandler(async (req, res, next) => {
 });
 
 exports.users_signin = asyncHandler(async (req, res, next) => {
-    const user = await db.query('SELECT * FROM users WHERE email = ?;', req.body.email);
+    const user = await db.query('SELECT * FROM user WHERE email = ?;', req.body.email);
     if (user.length === 0) {
         return res.status(401).json({
             message: 'Auth failed'

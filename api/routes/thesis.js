@@ -17,7 +17,7 @@ const upload = multer({ storage });
 
 
 // Create
-router.post('/', upload.single('thesisPDF'), ThesisController.thesis_create);
+router.post('/', checkAuth, upload.single('thesisPDF'), ThesisController.thesis_create);
 
 // Read
 router.get('/:thesisId', ThesisController.thesis_get);
