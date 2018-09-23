@@ -16,5 +16,7 @@ nodemon.json
 ### System Files ###
 *.DS_Store
 
+nevada.png
+
 # Uploads
 uploads
