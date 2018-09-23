@@ -4,19 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
-    "start": "nodemon app.js",
-    "open:src": "node app.js",
+    "start": "nodemon ./app.js  --exec babel-node -e js",
+    "open:src": "nodemon ./app.js --exec babel-node -e js",
+    "test": "mocha --compilers js:babel-core/register",
     "localtunnel": "lt --port 3000 --subdomain valon",
     "share": "npm-run-all --parallel open:src localtunnel"
   },
   "author": "Valon Haliti",
   "license": "ISC",
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
@@ -29,8 +25,9 @@
     "supertest": "^3.1.0"
   },
   "devDependencies": {
-    "babel-eslint": "^9.0.0",
-    "babel-register": "^6.26.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "nodemon": "^1.18.3",

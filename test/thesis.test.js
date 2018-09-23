@@ -1,16 +1,15 @@
-// During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
-const fs = require('fs');
+import fs from 'fs';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import app from '../app';
+import db from '../dbconnection';
 
-// Require the dev-dependencies
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const app = require('../app');
+process.env.NODE_ENV = 'test'; // During the test the env variable is set to test
+
 const expect = chai.expect;
 chai.should();
 chai.use(chaiHttp);
 const requester = chai.request(app).keepOpen();
-const db = require('../dbconnection');
 
 
 // Our parent block

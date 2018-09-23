@@ -1,5 +1,7 @@
-const mysql = require('mysql');
-const util = require('util');
+import mysql from 'mysql';
+import util from 'util';
+import dotenv from 'dotenv';
+dotenv.config()
 
 const pool = mysql.createPool({
     connectionLimit: 20,
@@ -32,4 +34,4 @@ pool.getConnection((err, connection) => {
 // Promisify for Node.js async/await.
 pool.query = util.promisify(pool.query);
 
-module.exports = pool;
+export default pool;

@@ -1,28 +1,19 @@
-const express = require('express');
+import express from 'express';
+import checkAuth from '../middleware/check-auth';
+import multer from 'multer';
+import { create, get, list, update, remove } from '../controllers/thesis';
+
 const router = express.Router();
-
-const checkAuth = require('../middleware/check-auth');
-const ThesisController = require('../controllers/thesis');
-
-const multer = require('multer');
 const storage = multer.diskStorage({
-    destination: function(req, file, callback) {
-        callback(null, './uploads/');
-    },
-    filename: function(req, file, callback) {
-        callback(null, Date.now() + file.originalname);
-    }
+    destination: (req, file, cb) => cb(null, './uploads/'),
+    filename: (req, file, cb) => cb(null, Date.now() + file.originalname)
 });
 const upload = multer({ storage });
 
+router.post('/', checkAuth, upload.single('thesisPDF'), create);
+router.get('/:thesisId', get);
+router.get('/', list);
+router.patch('/:thesisId', checkAuth, update);
+router.delete('/:thesisId', checkAuth, remove);
 
-router.post('/', checkAuth, upload.single('thesisPDF'), ThesisController.create);
-
-router.get('/:thesisId', ThesisController.get);
-router.get('/', ThesisController.list);
-
-router.patch('/:thesisId', ThesisController.update);
-
-router.delete('/:thesisId', ThesisController.delete);
-
-module.exports = router;
+export default router;

@@ -1,12 +1,14 @@
-require('dotenv').config();
-const express = require('express');
+import dotenv from 'dotenv';
+dotenv.config()
+import express from 'express';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+
+import userRouter from './api/routes/users';
+import thesisRouter from './api/routes/thesis';
+
 const app = express();
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
-const open = require('open');
-const userRoutes = require('./api/routes/users');
-const thesisRoutes = require('./api/routes/thesis');
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
@@ -26,8 +28,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/users', userRoutes);
-app.use('/thesis', thesisRoutes);
+app.use('/user', userRouter);
+app.use('/thesis', thesisRouter);
 
 app.use((req, res, next) => {
     const error = new Error("not found");
@@ -47,8 +49,6 @@ app.use((error, req, res, next) => {
 app.listen(port, (err) => {
     if (err) {
         console.log('Error in starting server', err);
-    } else {
-        open(`http://localhost:${port}`)
     }
     console.log(`listening in ${port}`)
 });
