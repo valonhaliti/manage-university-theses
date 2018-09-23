@@ -15,7 +15,6 @@ const db = require('../dbconnection');
 
 // Our parent block
 describe('Thesis', function() {
-
     before(function(done) {
         db
             .query('DELETE FROM thesis WHERE id > 0;')
@@ -28,7 +27,7 @@ describe('Thesis', function() {
 
     describe('POST /thesis', function() {
 
-        it('should require authorizaation', function(done) {
+        it('should require authorization', function(done) {
             requester
                 .post('/thesis')
                 .end((err, res) => {
@@ -55,7 +54,6 @@ describe('Thesis', function() {
         });
     });    
 });
-
 
 function loginUser(auth) {
     return function(done) {

@@ -4,9 +4,7 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
-
-const productRoutes = require('./api/routes/products');
-const orderRoutes = require('./api/routes/orders');
+const open = require('open');
 const userRoutes = require('./api/routes/users');
 const thesisRoutes = require('./api/routes/thesis');
 
@@ -28,8 +26,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/products', productRoutes);
-app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);
 app.use('/thesis', thesisRoutes);
 
@@ -48,8 +44,14 @@ app.use((error, req, res, next) => {
     })  
 });
 
-
-app.listen(port, () => console.log(`listening in ${port}`));
+app.listen(port, (err) => {
+    if (err) {
+        console.log('Error in starting server', err);
+    } else {
+        open(`http://localhost:${port}`)
+    }
+    console.log(`listening in ${port}`)
+});
 
 // export for testing
 module.exports = app;

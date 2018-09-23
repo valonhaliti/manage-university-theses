@@ -10,7 +10,6 @@ const pool = mysql.createPool({
     database: process.env.NODE_ENV === 'test' ? 'manage_thesis_test' : process.env.DB_NAME
 });
 
-
 pool.getConnection((err, connection) => {
     if (err) {
         switch (err.code) {

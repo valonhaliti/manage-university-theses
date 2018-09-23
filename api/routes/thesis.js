@@ -16,17 +16,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-// Create
-router.post('/', checkAuth, upload.single('thesisPDF'), ThesisController.thesis_create);
+router.post('/', checkAuth, upload.single('thesisPDF'), ThesisController.create);
 
-// Read
-router.get('/:thesisId', ThesisController.thesis_get);
-router.get('/', ThesisController.thesis_get_all);
+router.get('/:thesisId', ThesisController.get);
+router.get('/', ThesisController.list);
 
-// Update
-router.patch('/:thesisId', ThesisController.thesis_update);
+router.patch('/:thesisId', ThesisController.update);
 
-// Delete
-router.delete('/:thesisId', ThesisController.thesis_delete);
+router.delete('/:thesisId', ThesisController.delete);
 
 module.exports = router;

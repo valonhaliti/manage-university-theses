@@ -2,12 +2,10 @@ const asyncHandler = require('../utils/asyncHandler');
 const db = require('../../dbconnection');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { regexpEmail } = require('../constants');
 
 
-const regexpEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-
-
-exports.users_signup = asyncHandler(async (req, res, next) => {
+exports.signUp = asyncHandler(async (req, res, next) => {
     if (!regexpEmail.test(req.body.email)) {
         return res.status(409).json({ 
             message: 'Email address format not valid.'
@@ -45,7 +43,7 @@ exports.users_signup = asyncHandler(async (req, res, next) => {
     }        
 });
 
-exports.users_signin = asyncHandler(async (req, res, next) => {
+exports.signIn = asyncHandler(async (req, res, next) => {
     const user = await db.query('SELECT * FROM user WHERE email = ?;', req.body.email);
     if (user.length === 0) {
         return res.status(401).json({
