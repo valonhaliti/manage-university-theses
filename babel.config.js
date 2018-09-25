@@ -2,4 +2,8 @@ const presets = [
     [ "@babel/env"]
 ];
 
-module.exports = { presets };
+const plugins =  [
+    "@babel/plugin-transform-async-to-generator"
+  ]
+
+module.exports = { presets, plugins };

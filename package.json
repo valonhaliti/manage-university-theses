@@ -4,16 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./app.js  --exec babel-node -e js",
-    "open:src": "nodemon ./app.js --exec babel-node -e js",
-    "test": "mocha --require babel-polyfill --require babel-register",
+    "prestart": "npm run-script build", 
+    "start": "nodemon lib/app.js",
+    "test": "mocha --require babel/polyfill --require babel-register",
+    "open:src": "nodemon lib/app.js",
     "localtunnel": "lt --port 3000 --subdomain valon",
-    "build": "./node_modules/.bin/babel src --out-dir lib",
+    "build": "./node_modules/.bin/babel src --out-dir lib --require babel/polyfill",
     "share": "npm-run-all --parallel open:src localtunnel"
   },
   "author": "Valon Haliti",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@babel/cli": "^7.1.0",
     "@babel/core": "^7.1.0",
+    "@babel/plugin-transform-async-to-generator": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",

@@ -3,6 +3,7 @@ import db from '../utils/dbconnection';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { regexpEmail } from '../constants';
+import "@babel/polyfill";
 
 export const signUp = asyncHandler(async (req, res, next) => {
     if (!regexpEmail.test(req.body.email)) {

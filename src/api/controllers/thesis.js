@@ -1,5 +1,6 @@
 import asyncHandler from '../utils/asyncHandler';
 import db from '../utils/dbconnection';
+import "@babel/polyfill";
 
 export const create = asyncHandler(async (req, res, next) => {
     const thesis = {
