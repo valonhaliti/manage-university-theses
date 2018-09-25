@@ -6,6 +6,8 @@ nodemon.json
 # Optional npm cache directory
 .npm
 
+lib
+
 ### Visual Studio Code ###
 .vscode/*
 !.vscode/settings.json
