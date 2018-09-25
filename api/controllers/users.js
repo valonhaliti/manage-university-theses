@@ -1,5 +1,5 @@
 import asyncHandler from '../utils/asyncHandler';
-import db from '../../dbconnection';
+import db from '../utils/dbconnection';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { regexpEmail } from '../constants';

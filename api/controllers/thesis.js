@@ -1,5 +1,5 @@
 import asyncHandler from '../utils/asyncHandler';
-import db from '../../dbconnection';
+import db from '../utils/dbconnection';
 
 export const create = asyncHandler(async (req, res, next) => {
     const thesis = {

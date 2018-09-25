@@ -2,7 +2,7 @@ import fs from 'fs';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../app';
-import db from '../dbconnection';
+import db from '../api/utils/dbconnection';
 
 process.env.NODE_ENV = 'test'; // During the test the env variable is set to test
 
@@ -11,10 +11,9 @@ chai.should();
 chai.use(chaiHttp);
 const requester = chai.request(app).keepOpen();
 
-
-// Our parent block
 describe('Thesis', function() {
     before(function(done) {
+        // clean test database
         db
             .query('DELETE FROM thesis WHERE id > 0;')
             .then(() => done())
@@ -25,7 +24,6 @@ describe('Thesis', function() {
     before(loginUser(auth));
 
     describe('POST /thesis', function() {
-
         it('should require authorization', function(done) {
             requester
                 .post('/thesis')
@@ -43,7 +41,7 @@ describe('Thesis', function() {
                 .field('title', "Clustering i fjaleve nga rrjete sociale")
                 .field('description', "Ne kete punim jane perdorur algoritmete si K-Means etj.")
                 .field('category', "Data Science")
-                .attach('thesisPDF', fs.readFileSync('nevada.png'), 'nevada.png')
+                .attach('thesisPDF', fs.readFileSync('samplefile.pdf'), 'samplefile.pdf')
                 .end((err, res) => {
                     if (err) done(err);
                     expect(res).to.have.status(201);
@@ -57,7 +55,7 @@ describe('Thesis', function() {
 function loginUser(auth) {
     return function(done) {
         requester
-            .post('/users/login')
+            .post('/user/login')
             .send({
                 email: 'valonfhaliti@gmail.com',
                 password: 'valoni123'

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon ./app.js  --exec babel-node -e js",
     "open:src": "nodemon ./app.js --exec babel-node -e js",
-    "test": "mocha --compilers js:babel-core/register",
+    "test": "mocha --require babel-polyfill --require babel-register",
     "localtunnel": "lt --port 3000 --subdomain valon",
     "share": "npm-run-all --parallel open:src localtunnel"
   },
@@ -26,10 +26,12 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
+    "node-mocks-http": "^1.7.0",
     "nodemon": "^1.18.3",
     "npm-run-all": "^4.1.3",
     "open": "0.0.5"
