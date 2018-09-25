@@ -1,8 +1,8 @@
 import fs from 'fs';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../app';
-import db from '../api/utils/dbconnection';
+import app from '../src/app';
+import db from '../src/api/db/dbConnection';
 
 process.env.NODE_ENV = 'test'; // During the test the env variable is set to test
 
