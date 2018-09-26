@@ -4,7 +4,7 @@ import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 
-import userRouter from './api/routes/users';
+import userRouter from './api/routes/user';
 import thesisRouter from './api/routes/thesis';
 
 const app = express();
