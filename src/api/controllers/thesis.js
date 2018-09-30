@@ -1,5 +1,6 @@
 import asyncHandler from '../utils/asyncHandler';
 import db from '../db/dbConnection';
+import { removeFalseyValues  } from '../utils/updateFunction';
 import "@babel/polyfill";
 
 export const create = asyncHandler(async (req, res, next) => {
@@ -37,12 +38,12 @@ export const list = asyncHandler(async (req, res, next) => {
 });
 
 export const update = asyncHandler(async (req, res, next) => {
-    const updateThesis = {
-        title: req.body.name,
+    const updateThesis = removeFalseyValues({
+        title: req.body.title,
         description: req.body.description,
         category: req.body.category,
-        filepath: req.file.path
-    };
+        filepath: req.file && req.file.path
+    });
     await db.query('UPDATE thesis SET ? WHERE id = ?;', [updateThesis, req.params.thesisId]);
     updateThesis.id = req.param.thesisId;
     return res.status(201).json({ message: 'Thesis updated with success', data: updateThesis });

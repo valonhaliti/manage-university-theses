@@ -73,3 +73,28 @@ export const signIn = asyncHandler(async (req, res, next) => {
     });
 
 });
+
+export const get = asyncHandler(async (req, res, next) => {
+    const id = req.params.userId;
+    const rows = await db.query('SELECT id, firstname, lastname, email, registration_year FROM user where is_deleted = 0 AND id = ?;', id);
+    if (rows && rows.length > 0)
+        return res.status(200).json({ message: 'Data fetched with success.', data: rows });
+    else
+        return res.status(404).json({ message: 'User not found' });
+});
+
+export const list = asyncHandler(async (req, res, next) => {
+    let type = req.query.type; // type = 0 means student, type = 1 means university staff
+    if (type) type = parseInt(type);
+    let rows;
+    if (type && (type === 0 || type === 1))
+        rows = await db.query('SELECT id, firstname, lastname, email, registration_year FROM user where is_deleted = 0 AND type = ?;', type);
+    else
+        rows = await db.query('SELECT id, firstname, lastname, email, registration_year, type FROM user where is_deleted = 0;');
+    const response = {
+        message: 'Data fetched with success',
+        count: rows.length,
+        data: rows
+    };
+    return res.status(200).json(response);
+});
