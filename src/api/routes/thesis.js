@@ -13,7 +13,7 @@ const upload = multer({ storage });
 router.post('/', checkAuth, upload.single('thesisPDF'), create);
 router.get('/:thesisId', get);
 router.get('/', list);
-router.patch('/:thesisId', checkAuth, update);
+router.put('/:thesisId', checkAuth, upload.single('thesisPDF'), update);
 router.delete('/:thesisId', checkAuth, remove);
 
 export default router;
