@@ -1,15 +1,16 @@
 import asyncHandler from '../utils/asyncHandler';
 import db from '../db/dbConnection';
-import { removeFalseyValues  } from '../utils/updateFunction';
-import "@babel/polyfill";
+import { removeFalseyValues  } from '../utils/utilFunctionsForAPIs';
+import '@babel/polyfill';
 
 export const create = asyncHandler(async (req, res, next) => {
-    const thesis = {
+    const thesis = removeFalseyValues({
         title: req.body.title,
         description: req.body.description,
         category: req.body.category,
-        filepath: req.file.path
-    };
+        filepath: req.file.path,
+        added_by: req.userData.userId
+    });
     const rows = await db.query('INSERT INTO thesis SET ?;', thesis);
     thesis.id = rows.insertId;
     return res.status(201).json({

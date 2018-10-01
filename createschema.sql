@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     KEY `idx_user__email` (`email`)
 );
 
-CREATE TABLE IF NOT EXISTS  `thesis` (
+CREATE TABLE IF NOT EXISTS `thesis` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `title` VARCHAR(200) NOT NULL,
     `description` TEXT NULL,

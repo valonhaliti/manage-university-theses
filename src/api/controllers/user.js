@@ -3,7 +3,8 @@ import db from '../db/dbConnection';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { regexpEmail } from '../constants';
-import "@babel/polyfill";
+import { removeFalseyValues } from '../utils/utilFunctionsForAPIs';
+import '@babel/polyfill';
 
 export const signUp = asyncHandler(async (req, res, next) => {
     if (!regexpEmail.test(req.body.email)) {
@@ -13,14 +14,14 @@ export const signUp = asyncHandler(async (req, res, next) => {
     }
 
     const hash = await bcrypt.hash(req.body.password, 10);
-    const user = {
+    const user = removeFalseyValues({
         email: req.body.email,
         password: hash,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         type: req.body.type,
         registration_year: req.body.registration_year
-    };
+    });
     try {
         await db.query('INSERT INTO user SET ?;', user);
         return res.status(201).json({
@@ -44,7 +45,7 @@ export const signUp = asyncHandler(async (req, res, next) => {
 });
 
 export const signIn = asyncHandler(async (req, res, next) => {
-    const user = await db.query('SELECT * FROM user WHERE email = ?;', req.body.email);
+    const user = await db.query('SELECT * FROM user WHERE is_deleted = 0 AND email = ?;', req.body.email);
     if (user.length === 0) {
         return res.status(401).json({
             message: 'Auth failed'
@@ -98,3 +99,19 @@ export const list = asyncHandler(async (req, res, next) => {
     };
     return res.status(200).json(response);
 });
+
+export const update = asyncHandler(async (req, res, next) => {
+    const updateUser = removeFalseyValues({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname    
+    });
+    await db.query('UPDATE user SET ? WHERE id = ?;', [updateUser, req.params.userId]);
+    updateUser.id = req.param.userId;
+    return res.status(201).json({ message: 'User updated with success', data: updateUser });
+});
+
+export const remove = asyncHandler(async (req, res, next) => {
+    await db.query('UPDATE user SET is_deleted = 1 WHERE id = ?;', req.params.userId);
+    return res.status(201).json({ message: 'Successfully deleted!' });
+});
+
