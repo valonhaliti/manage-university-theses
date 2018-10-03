@@ -92,7 +92,7 @@ describe('Thesis', function() {
     describe('PUT /thesis', function() {
         it('should require authorization', function(done) {
             requester
-                .put(`/thesis/1`)
+                .put('/thesis/1')
                 .field('title', "Clustering of words from all social networks")
                 .end(function(err, res) {
                     if (err) return done(err);
