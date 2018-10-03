@@ -50,7 +50,7 @@ app.listen(port, (err) => {
     if (err) {
         console.log('Error in starting server', err);
     }
-    console.log(`listening in ${port}`)
+    console.log(`listening in ${port}`);
 });
 
 // export for testing

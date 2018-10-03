@@ -27,12 +27,14 @@ describe('User', function() {
         it('should create a user in database', function(done) {
             requester
                 .post('/user/signup')
-                .field("email", "test123@example.com")
-                .field("password", "topSecret")
-                .field("firstname", "James")
-                .field("lastname", "Joyce")
-                .field("type", 0)
-                .field("registration_year", 2018)
+                .send({
+                    "email": "test123@example.com",
+                    "password": "topSecret",
+                    "firstname": "James",
+                    "lastname": "Joyce",
+                    "type": 0,
+                    "registration_year": 2018
+                })
                 .end(function(err, res) {
                     if (err) return done(err);
                     expect(res).to.have.status(201);
@@ -43,12 +45,14 @@ describe('User', function() {
         it('should not create a user in database with existing email', function(done) {
             requester
                 .post('/user/signup')
-                .field("email", "test@example.com")
-                .field("password", "topSecret")
-                .field("firstname", "James")
-                .field("lastname", "Joyce")
-                .field("type", 0)
-                .field("registration_year", 2018)
+                .send({
+                    "email": "test123@example.com",
+                    "password": "topSecret",
+                    "firstname": "James",
+                    "lastname": "Joyce",
+                    "type": 0,
+                    "registration_year": 2018
+                })
                 .end(function(err, res) {
                     if (err) return done(err);
                     expect(res).to.have.status(409);
@@ -62,8 +66,10 @@ describe('User', function() {
         it('should login with succes, given correct username and password', function(done) {
             requester
                 .post('/user/login')
-                .field('email', 'test@example.com')
-                .field('password', 'topSecret')
+                .send({
+                    "email": "test123@example.com",
+                    "password": "topSecret"
+                })
                 .end(function(err, res) {
                     if (err) return done(err);
                     expect(res).to.have.status(200);
@@ -74,8 +80,10 @@ describe('User', function() {
         it('should give 401 status code when trying to login with incorrect username and password', function(done) {
             requester
                 .post('/user/login')
-                .field('email', 'test@example.com')
-                .field('password', 'iAmHacker')
+                .send({
+                    "email": "test123@example.com",
+                    "password": "iAmHacker"
+                })
                 .end(function(err, res) {
                     if (err) return done(err);
                     expect(res).to.have.status(401);
@@ -125,7 +133,7 @@ describe('User', function() {
         it('should require authorization', function(done) {
             requester
                 .put('/user/2')
-                .field('firstname', "James")
+                .send({firstname: 'James'})
                 .end(function(err, res) {
                     if (err) return done(err);
                     expect(res).to.have.status(401);
@@ -133,11 +141,11 @@ describe('User', function() {
                 });
         });
 
-        it('should PUT (Update) with success a user', function(done) {
+        it('should PUT (Update) with success the user with id = 1', function(done) {
             requester
-                .put('/user/2')
+                .put('/user/1')
                 .set('Authorization', `Bearer ${auth.token}`)
-                .field('firstname', "James")
+                .send({firstname: 'James'})
                 .end(function(err, res) {
                     if (err) return done(err);
                     expect(res).to.have.status(201);
