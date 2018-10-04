@@ -12,7 +12,6 @@ export const signUp = asyncHandler(async (req, res, next) => {
             message: 'Email address format not valid.'
         });
     }
-
     const hash = await bcrypt.hash(req.body.password, 10);
     const user = removeFalseyValues({
         email: req.body.email,
@@ -88,9 +87,9 @@ export const list = asyncHandler(async (req, res, next) => {
     let type = req.query.type; // type = 0 means student, type = 1 means university staff
     if (type) type = parseInt(type);
     let rows;
-    if (type && (type === 0 || type === 1))
+    if ((type !== undefined) && (type === 0 || type === 1)) 
         rows = await db.query('SELECT id, firstname, lastname, email, registration_year FROM user where is_deleted = 0 AND type = ?;', type);
-    else
+    else 
         rows = await db.query('SELECT id, firstname, lastname, email, registration_year, type FROM user where is_deleted = 0;');
     const response = {
         message: 'Data fetched with success',
