@@ -8,9 +8,9 @@
     "start": "nodemon src/app.js --exec babel-node",
     "test": "set NODE_ENV=test&&mocha --require @babel/polyfill --require @babel/register",
     "open:src": "nodemon lib/app.js",
-    "localtunnel": "lt --port 3000 --subdomain valon",
+    "localtunnel": "lt --port 3001 --subdomain service",
     "build": "./node_modules/.bin/babel src --out-dir lib --require babel/polyfill",
-    "share": "npm-run-all --parallel open:src localtunnel"
+    "share": "npm-run-all --parallel start localtunnel"
   },
   "author": "Valon Haliti",
   "license": "ISC",
