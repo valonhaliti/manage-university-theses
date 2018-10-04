@@ -8,7 +8,7 @@ import userRouter from './api/routes/user';
 import thesisRouter from './api/routes/thesis';
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
@@ -16,9 +16,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-    res.header('Access-Controll-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header(
-        'Access-Controll-Allow-Headers', 
+        'Access-Control-Allow-Headers', 
         'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     );
     if (req.method === 'OPTIONS') {
