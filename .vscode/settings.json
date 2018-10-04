@@ -3,9 +3,9 @@
         "**/lib": true,
         "**/.vscode": true,
         "**/uploads": true,
-        ".env": true,
-        "package-lock.json": true,
-        "createschema.sql": true,
-        "samplefile.pdf": true
+        "**/.env": true,
+        "**/package-lock.json": true,
+        "**/createschema.sql": true,
+        "**/samplefile.pdf": true
     }
 }
