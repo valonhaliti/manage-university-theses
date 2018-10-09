@@ -30,6 +30,12 @@ CREATE TABLE IF NOT EXISTS `thesis` (
     CONSTRAINT `fk_Thesis__added_by` FOREIGN KEY (`added_by`) REFERENCES `USER` (`id`)
 );
 
+CREATE TABLE IF NOT EXISTS `keyword` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(100) NOT NULL UNIQUE,
+    PRIMARY KEY (`id`)
+);
+
 CREATE TABLE IF NOT EXISTS  `thesis_to_user` (
     `professor_id` INT NOT NULL,
     `student_id` INT NOT NULL,
@@ -41,6 +47,13 @@ CREATE TABLE IF NOT EXISTS  `thesis_to_user` (
     CONSTRAINT `fk_ThesisToUser__professor_id` FOREIGN KEY (`professor_id`) REFERENCES `USER` (`id`),
     CONSTRAINT `fk_ThesisToUser__student_id` FOREIGN KEY (`student_id`) REFERENCES `USER` (`id`),
     CONSTRAINT `fk_ThesisToUser__thesis_id` FOREIGN KEY (`thesis_id`) REFERENCES `thesis`(`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `thesis_to_keyword` (
+	`thesis_id` INT NOT NULL,
+    `keyword_id` INT NOT NULL,
+    CONSTRAINT `fk_ThesisToKeyword__thesis_id` FOREIGN KEY (`thesis_id`) REFERENCES `thesis` (`id`),
+    CONSTRAINT `fk_ThesisToKeyword__keyword_id` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`)
 );
 
 
