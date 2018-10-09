@@ -4,16 +4,16 @@ import Thesis from './Thesis';
 import axios from 'axios';
 
 class ThesisList extends Component {
-    state = {
-        theses: []
+    constructor() {
+        super();
+        this.state = {
+            theses: []
+        }
     }
 
-    componentDidMount() {
-        axios.get('http://localhost:3001/thesis')
-            .then(res => {
-                const theses = res.data.data;
-                this.setState({ theses });
-            });
+    async componentDidMount() {
+        const response = await axios.get('http://localhost:3001/thesis');
+        this.setState({ theses: response.data.data });
     }
 
     render() {
