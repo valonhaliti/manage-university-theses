@@ -17,5 +17,5 @@ This project will be used by university staff and its students to manage theses 
 ## Folder structure of repository
 This application has two main folders: 
 - **service** - this is the Node.js backend code
-- **web** - this is the client, build using React
+- **web** - this is the client, built using React
 
