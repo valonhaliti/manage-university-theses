@@ -2,6 +2,8 @@ import asyncHandler from '../utils/asyncHandler';
 import { removeFalseyValues  } from '../utils/utilFunctionsForAPIs';
 import '@babel/polyfill';
 import thesis from '../model/thesis';
+import thesisToUser from '../model/thesisToUser';
+import thesisToKeyword from '../model/thesisToKeyword';
 
 export const create = asyncHandler(async (req, res, next) => {
     const thesisObj = removeFalseyValues({
@@ -11,8 +13,29 @@ export const create = asyncHandler(async (req, res, next) => {
         filepath: req.file.path,
         added_by: req.userData.userId
     });
-    const response = await thesis.create(thesisObj);
-    thesis.id = response.id;
+    const responseCreateThesis = await thesis.create(thesisObj);
+    thesis.id = responseCreateThesis.id;
+
+    await thesisToUser.create({
+        professor_id: req.body.professorId,
+        student_id: req.body.studentId,
+        thesis_id: thesis.id
+    });
+
+    if (req.body.keywords) {
+
+        console.log(req.body.keywords);
+        console.log({
+            keywords: JSON.parse(req.body.keywords),
+            thesisId: thesis.id
+        });
+    
+        await thesisToKeyword.create({
+            keywords: JSON.parse(req.body.keywords),
+            thesisId: thesis.id
+        });
+    }
+
     return res.status(201).json({
         message: 'Thesis added in database successfully.',
         data: thesis
