@@ -55,6 +55,7 @@ export default class {
 
     static async createKeywordsAndReturnIds(keywords) {
         const insertKeywordNames = keywords.filter(x => !x.id).map(x => [x.name]);
+        if (insertKeywordNames.length === 0) return;
         const insertResult = await db.query('INSERT IGNORE INTO `keyword` (`name`) VALUES ?;', [insertKeywordNames]);
         if (insertResult.insertId > 0) {
             // Since the last result gives only the insert id of the first row, now we have to get all IDs 
