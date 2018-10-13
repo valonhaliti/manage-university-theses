@@ -3,5 +3,3 @@ node_js:
   - "lts/*"
 before_install:
   - cd service
-before_script:
-  - cd service
