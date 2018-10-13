@@ -2,6 +2,9 @@ import asyncHandler from '../utils/asyncHandler';
 import { removeFalseyValues  } from '../utils/utilFunctionsForAPIs';
 import '@babel/polyfill';
 import thesis from '../model/thesis';
+import thesisToUser from '../model/thesisToUser';
+import thesisToKeyword from '../model/thesisToKeyword';
+import { DATA_CREATE_SUCCESS } from '../messages/messages';
 
 export const create = asyncHandler(async (req, res, next) => {
     const thesisObj = removeFalseyValues({
@@ -11,8 +14,22 @@ export const create = asyncHandler(async (req, res, next) => {
         filepath: req.file.path,
         added_by: req.userData.userId
     });
-    const response = await thesis.create(thesisObj);
-    thesis.id = response.id;
+    const responseCreateThesis = await thesis.create(thesisObj);
+    thesis.id = responseCreateThesis.id;
+
+    await thesisToUser.create({
+        professor_id: req.body.professorId,
+        student_id: req.body.studentId,
+        thesis_id: thesis.id
+    });
+
+    if (req.body.keywords) {
+        await thesisToKeyword.create({
+            keywords: JSON.parse(req.body.keywords),
+            thesisId: thesis.id
+        });
+    }
+
     return res.status(201).json({
         message: 'Thesis added in database successfully.',
         data: thesis
@@ -45,7 +62,17 @@ export const update = asyncHandler(async (req, res, next) => {
         category: req.body.category,
         filepath: req.file && req.file.path
     });
-    await thesis.update(updateThesis, req.params.thesisId);
+    if (Object.keys(updateThesis).length > 0) {
+        await thesis.update(updateThesis, req.params.thesisId);
+    }
+        
+    if (req.body.keywords) {
+        await thesisToKeyword.update({
+            keywords: JSON.parse(req.body.keywords),
+            thesisId: req.params.thesisId
+        })
+    }
+
     updateThesis.id = req.params.thesisId;
     return res.status(201).json({ message: 'Thesis updated with success', data: updateThesis });
 });

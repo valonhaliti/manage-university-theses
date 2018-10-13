@@ -53,7 +53,8 @@ CREATE TABLE IF NOT EXISTS `thesis_to_keyword` (
 	`thesis_id` INT NOT NULL,
     `keyword_id` INT NOT NULL,
     CONSTRAINT `fk_ThesisToKeyword__thesis_id` FOREIGN KEY (`thesis_id`) REFERENCES `thesis` (`id`),
-    CONSTRAINT `fk_ThesisToKeyword__keyword_id` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`)
+    CONSTRAINT `fk_ThesisToKeyword__keyword_id` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`),
+    CONSTRAINT `fk_ThesisToKeyword__thesis_id__keyword_id` UNIQUE (`thesis_id`, `keyword_id`)
 );
 
 
