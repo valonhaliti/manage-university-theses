@@ -7,6 +7,16 @@ chai.should();
 chai.use(chaiHttp);
 const requester = chai.request(app).keepOpen();
 
+// Remove all data from 'manage_thesis_test.thesis_to_user' table
+before(function(done) {
+  let deleteQuery = 'DELETE FROM thesis_to_user WHERE professor_id > 0;';
+  db
+    .query(deleteQuery)
+    .then(() => {
+      done()
+    }).catch(err => done(err));
+});
+
 describe('User', function() {
   // clean test database and insert one record in db with id = 2
   before(function(done) {

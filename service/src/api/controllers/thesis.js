@@ -15,7 +15,6 @@ export const create = asyncHandler(async (req, res, next) => {
   });
   const responseCreateThesis = await thesis.create(thesisObj);
   thesisObj.id = responseCreateThesis.id;
-
   await thesisToUser.create({
     professor_id: req.body.professorId,
     student_id: req.body.studentId,
