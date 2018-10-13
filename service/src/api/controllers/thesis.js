@@ -55,21 +55,16 @@ export const list = asyncHandler(async (req, res, next) => {
 });
 
 export const update = asyncHandler(async (req, res, next) => {
-  console.log(req.body);
   const updateThesis = removeFalseyValues({
     title: req.body.title,
     description: req.body.description,
     category: req.body.category,
     filepath: req.file && req.file.path
   });
-  console.log(updateThesis);
+
   if (Object.keys(updateThesis).length > 0) {
-    console.log('aa');
     await thesis.update(updateThesis, req.params.thesisId);
   }
-
-  console.log('req.body.keywords', typeof req.body.keywords);
-  console.log('req.body.keywords', req.body.keywords);
 
   if (req.body.keywords) {
     await thesisToKeyword.update({
