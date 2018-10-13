@@ -4,6 +4,7 @@ import '@babel/polyfill';
 import thesis from '../model/thesis';
 import thesisToUser from '../model/thesisToUser';
 import thesisToKeyword from '../model/thesisToKeyword';
+import { DATA_CREATE_SUCCESS } from '../messages/messages';
 
 export const create = asyncHandler(async (req, res, next) => {
     const thesisObj = removeFalseyValues({
@@ -23,13 +24,6 @@ export const create = asyncHandler(async (req, res, next) => {
     });
 
     if (req.body.keywords) {
-
-        console.log(req.body.keywords);
-        console.log({
-            keywords: JSON.parse(req.body.keywords),
-            thesisId: thesis.id
-        });
-    
         await thesisToKeyword.create({
             keywords: JSON.parse(req.body.keywords),
             thesisId: thesis.id
@@ -68,7 +62,17 @@ export const update = asyncHandler(async (req, res, next) => {
         category: req.body.category,
         filepath: req.file && req.file.path
     });
-    await thesis.update(updateThesis, req.params.thesisId);
+    if (Object.keys(updateThesis).length > 0) {
+        await thesis.update(updateThesis, req.params.thesisId);
+    }
+        
+    if (req.body.keywords) {
+        await thesisToKeyword.update({
+            keywords: JSON.parse(req.body.keywords),
+            thesisId: req.params.thesisId
+        })
+    }
+
     updateThesis.id = req.params.thesisId;
     return res.status(201).json({ message: 'Thesis updated with success', data: updateThesis });
 });

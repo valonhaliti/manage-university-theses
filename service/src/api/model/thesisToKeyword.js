@@ -2,46 +2,71 @@ import db from '../db/dbConnection';
 import { DATA_CREATE_SUCCESS } from '../messages/messages';
 
 export default class {
-    // this is not completed, and most of the functionality is for update API actually
-    static async create(thesisToKeywordObj) {
-        console.log(thesisToKeywordObj);
-        const { keywords, thesisId } = thesisToKeywordObj;
-
+    /**
+     * Insert rows in thesis_to_keywords table in database.
+     * @param {Object} param0                   - { keywords, thesisId }
+     * @param {Object[]} param0.keywords        - array that of objects that include the IDs (optional) and name of keywords
+     * @param {string} param0.keywords[].id     - the id of keyword if it already exists in db (optional)
+     * @param {string} param0.keywords[].name   - name of the keyword
+     * @param {number} param0.thesisId          - id of thesis
+     */
+    static async create({ keywords, thesisId } ) {
         const keywordIds = keywords.filter(x => x.id).map(x => x.id);
-        const newKeywordsIds = await this.createAndReturnKeywordsIds(keywords);
-        const thesisKeywordsIds = [...keywordIds, newKeywordsIds];
+        const newKeywordsIds = await this.createKeywordsAndReturnIds(keywords);
+        const thesisKeywordsIds = [...keywordIds, ...newKeywordsIds];
 
-        const oldThesisKeywordIds = await this.getKeywordsIdsOfThesis(thesisId);
+        const valuesToBeInserted = thesisKeywordsIds.map(keywordId => [thesisId, keywordId]);
 
-        const deleteThesisKeywordIds = oldThesisKeywordIds.filter(x => !(x.includes(thesisKeywordsIds)));
-
-        if (deleteThesisKeywordIds && deleteThesisKeywordIds.length > 0) {
-            await this.remove(thesisId, deleteThesisKeywordIds)
-        }
-        
-        const values = [];
-        newKeywordsIds.forEach(keywordId => {
-            values.push([thesisId, keywordId]);
-        });
-        console.log(values);
-        await db.query('INSERT INTO `thesis_to_keyword` (`thesis_id`, `keyword_id`) VALUES ?;', [values]);
-        return DATA_CREATE_SUCESS;
+        await db.query('INSERT INTO `thesis_to_keyword` (`thesis_id`, `keyword_id`) VALUES ?;', [valuesToBeInserted]);
+        return DATA_CREATE_SUCCESS;
     }
 
-    static async createAndReturnKeywordsIds(keywords) {
+    /**
+     * Update thesis_to_keywords table
+     * @param {Object} param0                   - { keywords, thesisId }
+     * @param {Object[]} param0.keywords        - array that of objects that include the IDs (optional) and name of keywords
+     * @param {string} param0.keywords[].id     - the id of keyword if it already exists in db (optional)
+     * @param {string} param0.keywords[].name   - name of the keyword
+     * @param {number} param0.thesisId          - id of thesis
+     */
+    static async update({ keywords, thesisId }) {
+        const keywordIds = keywords.filter(x => x.id).map(x => x.id);
+        const newKeywordsIds = await this.createKeywordsAndReturnIds(keywords);
+        const thesisKeywordsIds = [...keywordIds, ...newKeywordsIds];
+
+        if (thesisKeywordsIds.length === 0) {
+            return;
+        }
+
+        const oldThesisKeywordIds = await this.getKeywordsIdsOfThesis(thesisId);
+        const deleteThesisKeywordIds = oldThesisKeywordIds.filter(x => !(thesisKeywordsIds.includes(x)));
+
+        if (deleteThesisKeywordIds && deleteThesisKeywordIds.length > 0) {
+            await this.remove(thesisId, deleteThesisKeywordIds);
+        }
+        
+        const valuesToBeUpdated = thesisKeywordsIds.map(keywordId => [thesisId, keywordId]);
+        if (valuesToBeUpdated.length === 0) {
+            return;
+        }
+        await db.query('INSERT IGNORE INTO `thesis_to_keyword` (`thesis_id`, `keyword_id`) VALUES ?;', [valuesToBeUpdated]);
+        return DATA_CREATE_SUCCESS;
+    }
+
+    static async createKeywordsAndReturnIds(keywords) {
         const insertKeywordNames = keywords.filter(x => !x.id).map(x => [x.name]);
         const insertResult = await db.query('INSERT IGNORE INTO `keyword` (`name`) VALUES ?;', [insertKeywordNames]);
-        
-        // Since the last result gives only the insert id of the first row, now we have to get all IDs 
-        // that are greater and equal to this insert id   
-        const insertedKeywordsIds = await db.query('SELECT id FROM `keyword` WHERE id >= ?;', insertResult.insertId);
-        
-        return insertedKeywordsIds.map(row => row.id);
+        if (insertResult.insertId > 0) {
+            // Since the last result gives only the insert id of the first row, now we have to get all IDs 
+            // that are greater and equal to this insert id   
+            const insertedKeywordsIds = await db.query('SELECT id FROM `keyword` WHERE id >= ?;', insertResult.insertId);
+            return insertedKeywordsIds.map(row => row.id);    
+        }
+        return [];
     }
 
     static async getKeywordsIdsOfThesis(thesisId) {
         const result = await db.query('SELECT `keyword_id` FROM `thesis_to_keyword` WHERE thesis_id = ?;', thesisId);
-        console.log('4', result);
         return result.map(x => x.keyword_id);
     }
 
