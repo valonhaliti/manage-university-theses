@@ -13,4 +13,3 @@ router.delete('/:userId', checkAuth, remove);
 
 
 export default router;
-
