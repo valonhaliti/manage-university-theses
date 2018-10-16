@@ -25,9 +25,26 @@ CREATE TABLE IF NOT EXISTS `thesis` (
   `published_date`TIMESTAMP(6) NULL,
   `is_deleted` TINYINT NOT NULL DEFAULT 0,
   `added_by` INT NULL,
+  -- status:
+  --  0 - pending
+  --  1 - to be discussed
+  --  2 - approved
+  --  3 - closed
+  `status` TINYINT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx_thesis__category` (`category`),
   CONSTRAINT `fk_Thesis__added_by` FOREIGN KEY (`added_by`) REFERENCES `USER` (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS similarity_report (
+	`id` INT NOT NULL AUTO_INCREMENT,
+  `thesis_id` INT NOT NULL,
+  `ratings` JSON NOT NULL,
+  `best_match` JSON NOT NULL,
+  `last_modified_date` TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  PRIMARY KEY(`id`),
+	KEY `idx_similarity_report__thesis_id` (`thesis_id`),
+	CONSTRAINT `fk_Similarity_report__thesis_id` FOREIGN KEY (`thesis_id`) REFERENCES `thesis` (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `keyword` (
@@ -56,5 +73,3 @@ CREATE TABLE IF NOT EXISTS `thesis_to_keyword` (
   CONSTRAINT `fk_ThesisToKeyword__keyword_id` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`),
   CONSTRAINT `fk_ThesisToKeyword__thesis_id__keyword_id` UNIQUE (`thesis_id`, `keyword_id`)
 );
-
-

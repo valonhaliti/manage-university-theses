@@ -4,6 +4,7 @@ import '@babel/polyfill';
 import thesis from '../model/thesis';
 import thesisToUser from '../model/thesisToUser';
 import thesisToKeyword from '../model/thesisToKeyword';
+import axios from 'axios';
 
 export const create = asyncHandler(async (req, res, next) => {
   const thesisObj = removeFalseyValues({
@@ -27,6 +28,9 @@ export const create = asyncHandler(async (req, res, next) => {
       thesisId: thesisObj.id
     });
   }
+
+  // FIXME: Don't use localhost here
+  axios.get(`http://localhost:3001/comparetheses/comparewithall/${thesisObj.id}`);
 
   return res.status(201).json({
     message: 'Thesis added in database successfully.',
