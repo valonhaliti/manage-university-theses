@@ -16,6 +16,11 @@ export default class {
     return rows;
   }
 
+  static async getAllThesesExcluding(thesisId) {
+    const rows = await db.query('SELECT id, title, description, category FROM thesis WHERE is_deleted = 0 AND id <> ?;', thesisId);
+    return rows;
+  }
+
   static async update(updateThesisObj, thesisId) {
     const response = await db.query('UPDATE thesis SET ? WHERE id = ?;', [updateThesisObj, thesisId]);
     return response;

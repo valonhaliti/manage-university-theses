@@ -42,6 +42,8 @@ describe('Thesis', function() {
         .field('title', "Clustering of words from social networks")
         .field('description', "In thesis are used algorithms like K-Means etc.")
         .field('category', "Data Science")
+        .field('professorId', 1)
+        .field('studentId', 1)
         .attach('thesisPDF', fs.readFileSync('samplefile.pdf'), 'samplefile.pdf')
         .end(function(err, res) {
           if (err) return done(err);
