@@ -2,25 +2,30 @@ import asyncHandler from '../utils/asyncHandler';
 import '@babel/polyfill';
 import thesis from '../model/thesis';
 import stringSimilarity from 'string-similarity';
-import maxBy from 'lodash/maxBy'
+import sortBy from 'lodash/sortBy';
 import similarityReportModel from '../model/similarityReport';
 
 
-export const compareThesisWithAll = asyncHandler(async (req, res, next)  => {
+export const compareThesisWithAll = asyncHandler(async (req, res, next) => {
   const { thesisId } = req.params;
-  let abstract = await thesis.get(thesisId);
-  abstract = abstract[0].description;
 
-  const otherTheses = await thesis.getAllThesesExcluding(thesisId);
-  const otherThesesAbstract = otherTheses.map(thesis => thesis.description);
+  const allTheses = await thesis.list();
   
-  let { ratings, bestMatch } = stringSimilarity.findBestMatch(abstract, otherThesesAbstract);
+  const thesisIdxArr = allTheses.findIndex(obj => obj.id === Number(thesisId));
+  const thesisAbstract = allTheses.splice(thesisIdxArr, 1)[0].description;
 
-  ratings = ratings.map((rating, idx) => Object.assign(rating, { id: otherTheses[idx].id, title: otherTheses[idx].title }))
+  const otherThesesAbstract = allTheses.map(thesis => thesis.description); // actually, now allTheses contains all OTHER theses
+
+  let { ratings, bestMatch } = stringSimilarity.findBestMatch(thesisAbstract, otherThesesAbstract);
+
+  ratings = ratings.map((rating, idx) => Object.assign(rating, { id: allTheses[idx].id, title: allTheses[idx].title }));
+  ratings = sortBy(ratings, 'rating');
+
+  const top3Ratings = ratings.length < 3 ? ratings : ratings.slice(ratings.length - 3);
 
   similarityReportModel.createOrUpdate({
     thesis_id: thesisId,
-    ratings: JSON.stringify(ratings),
+    ratings: JSON.stringify(top3Ratings), // we want to save only the best three ratings in database
     best_match: JSON.stringify(bestMatch),
     last_modified_date: new Date()
   });
