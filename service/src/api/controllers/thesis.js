@@ -29,9 +29,6 @@ export const create = asyncHandler(async (req, res, next) => {
     });
   }
 
-  // FIXME: Don't use localhost here
-  axios.get(`http://localhost:3001/comparetheses/comparewithall/${thesisObj.id}`);
-
   return res.status(201).json({
     message: 'Thesis added in database successfully.',
     data: thesisObj
