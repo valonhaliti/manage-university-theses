@@ -100,10 +100,15 @@ export const list = asyncHandler(async (req, res, next) => {
 });
 
 export const update = asyncHandler(async (req, res, next) => {
+  if (req.userData !== 'admin' || req.userData.userId !== req.params.id) {
+    return res.status(401).json({ message: 'Not authorized to update' })
+  }
+
   const updateUser = removeFalseyValues({
     firstname: req.body.firstname,
     lastname: req.body.lastname
   });
+
   await user.update(updateUser, req.params.id);
   updateUser.id = req.param.userId;
   return res.status(201).json({ message: 'User updated with success', data: updateUser });

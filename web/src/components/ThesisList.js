@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Thesis from './Thesis';
+import Grid from '@material-ui/core/Grid';
 
 import axios from 'axios';
 
@@ -19,7 +20,16 @@ class ThesisList extends Component {
   render() {
     return (
       <div>
-        {this.state.theses.map((thesis, idx) => <Thesis key={idx} title={thesis.title} description={thesis.description} />)}
+        {this.state.theses ? (
+          <Grid container spacing={24} style={{padding: 24}}>
+            {this.state.theses.map((thesis, idx) => (
+              <Grid item xs={12} sm={6} lg={4} xl={3}>
+                <Thesis key={idx} title={thesis.title} description={thesis.description} />
+              </Grid>
+            ))}
+          </Grid>
+        ) : null}
+        
       </div>
     )
   }

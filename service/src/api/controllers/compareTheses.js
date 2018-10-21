@@ -5,8 +5,7 @@ import stringSimilarity from 'string-similarity';
 import sortBy from 'lodash/sortBy';
 import similarityReportModel from '../model/similarityReport';
 
-
-export const compareThesisWithAll = asyncHandler(async (req, res, next) => {
+export const compareThesisWithAll = asyncHandler(async (req, res, next)  => {
   const { thesisId } = req.params;
 
   const allTheses = await thesis.list();
@@ -14,7 +13,7 @@ export const compareThesisWithAll = asyncHandler(async (req, res, next) => {
   const thesisIdxArr = allTheses.findIndex(obj => obj.id === Number(thesisId));
   const thesisAbstract = allTheses.splice(thesisIdxArr, 1)[0].description;
 
-  const otherThesesAbstract = allTheses.map(thesis => thesis.description); // actually, now allTheses contains all OTHER theses
+  const otherThesesAbstract = allTheses.map(thesis => thesis.description); // actually now allTheses contains all OTHER theses
 
   let { ratings, bestMatch } = stringSimilarity.findBestMatch(thesisAbstract, otherThesesAbstract);
 

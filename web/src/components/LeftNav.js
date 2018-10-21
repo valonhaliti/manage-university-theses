@@ -11,12 +11,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import LeftNav from './components/LeftNav';
 
-import Header from './components/Header';
-import ThesisList from './components/ThesisList';
-
-import './App.css';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -44,25 +39,47 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
-class App extends Component {  
+class LeftNav extends Component {  
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <Header />
-        <LeftNav />
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <ThesisList />
-        </main>
-      </div>
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.toolbar}>
+            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+              Menaxhimi i temave te diplomes
+            </Typography>
+          </div>
+          <List>
+            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+          <List>
+            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
     );
   }
 }
 
-App.propTypes = {
+
+LeftNav.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(LeftNav);
