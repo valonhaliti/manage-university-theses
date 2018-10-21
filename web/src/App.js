@@ -2,15 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import LeftNav from './components/LeftNav';
 
 import Header from './components/Header';
@@ -18,7 +9,6 @@ import ThesisList from './components/ThesisList';
 
 import './App.css';
 
-const drawerWidth = 240;
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -26,16 +16,6 @@ const styles = theme => ({
     overflow: 'hidden',
     position: 'relative',
     display: 'flex',
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
