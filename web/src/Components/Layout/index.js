@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import LeftNav from './components/LeftNav';
+import LeftNav from './LeftNav';
 
-import Header from './components/Header';
-import ThesisList from './components/ThesisList';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import './App.css';
+import Header from './Header';
 
 const styles = theme => ({
   root: {
@@ -24,9 +23,9 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
-class App extends Component {  
+class Layout extends Component {  
   render() {
-    const { classes } = this.props;
+    const { classes, children } = this.props;
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -34,15 +33,15 @@ class App extends Component {
         <LeftNav />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <ThesisList />
+          { children }
         </main>
       </div>
     );
   }
 }
 
-App.propTypes = {
+Layout.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(Layout);
