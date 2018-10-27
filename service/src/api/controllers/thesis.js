@@ -10,7 +10,7 @@ export const create = asyncHandler(async (req, res, next) => {
     title: req.body.title,
     description: req.body.description,
     category: req.body.category,
-    filepath: req.file.path,
+    filepath: req.file && req.file.path,
     added_by: req.userData.userId
   });
   const responseCreateThesis = await thesis.create(thesisObj);

@@ -38,9 +38,9 @@ const styles = theme => ({
   }
 })
 
-function Thesis({ classes, title, description, category, status: stateOfThesis, filepath, createdDate }) {
+const Thesis = ({ classes, title, description, category, status: stateOfThesis, filepath, createdDate }) => {
   const chipData = chipDataConfig[stateOfThesis];
-  const fileName = filepath.split('\\')[1];
+  const fileName = filepath && filepath.split('\\')[1];
 
   return (
     <div>
