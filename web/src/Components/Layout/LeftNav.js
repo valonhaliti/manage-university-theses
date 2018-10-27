@@ -11,12 +11,11 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem'
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-
+import { compose } from 'recompose'
 import AddIcon from '@material-ui/icons/AddCircle';
 import PendingThesesIcon from '@material-ui/icons/ThumbsUpDown';
 import ApprovedTheses from '@material-ui/icons/DoneOutline';
 import InfoIcon from '@material-ui/icons/Info'
-
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -46,7 +45,7 @@ const styles = theme => ({
 
 class LeftNav extends Component {  
   render() {
-    const { classes } = this.props;
+    const { classes, location: { pathname } } = this.props;
     return (
         <Drawer
           className={classes.drawer}
@@ -57,16 +56,30 @@ class LeftNav extends Component {
         >
           <div className={classes.toolbar} />
           <List>
-            <ListItem component={Link} to="/ngarko" button key="add-new-thesis">        
+            <ListItem 
+              component={Link} 
+              to="/ngarko" 
+              button 
+              key="add-new-thesis"
+              selected={'/ngarko' === pathname}
+            >        
               <ListItemIcon> <AddIcon color="primary" /> </ListItemIcon>
               <ListItemText primary="Ngarko temën" />              
             </ListItem>
             <Divider />
-            <ListItem button key="pending-thesis" component={Link} to="/theses"> 
+            <ListItem 
+              button 
+              key="pending-thesis" 
+              component={Link} 
+              to="/theses"
+              selected={'/theses' === pathname}
+            > 
               <ListItemIcon> <InfoIcon /> </ListItemIcon>
               <ListItemText primary="Temat e fundit" />              
             </ListItem>
-            <ListItem button key="pending-thesis"> 
+            <ListItem 
+              button 
+              key="pending-thesis"> 
               <ListItemIcon> <PendingThesesIcon /> </ListItemIcon>
               <ListItemText primary="Temat në shqyrtim" />              
             </ListItem>
@@ -81,9 +94,11 @@ class LeftNav extends Component {
   }
 }
 
-
 LeftNav.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(LeftNav);
+export default compose(
+  withRouter,
+  withStyles(styles)
+)(LeftNav);

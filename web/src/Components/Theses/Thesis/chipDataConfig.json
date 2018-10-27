@@ -1,0 +1,18 @@
+{
+  "0": {
+    "label": "Në shqyrtim",
+    "color": "secondary"
+  },
+  "1": {
+    "label": "Në diskutim",
+    "color": "secondary"
+  },
+  "2": {
+    "label": "E aprovuar",
+    "color": "primary"
+  },
+  "3": {
+    "label": "E mbyllur",
+    "color": "default"
+  }
+}

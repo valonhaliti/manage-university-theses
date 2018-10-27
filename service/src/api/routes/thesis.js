@@ -1,7 +1,7 @@
 import express from 'express';
 import checkAuth from '../middleware/check-auth';
 import multer from 'multer';
-import { create, get, list, update, remove } from '../controllers/thesis';
+import { create, get, list, update, remove, downloadThesis } from '../controllers/thesis';
 
 const router = express.Router();
 const storage = multer.diskStorage({
@@ -15,5 +15,6 @@ router.get('/:thesisId', get);
 router.get('/', list);
 router.put('/:thesisId', checkAuth, upload.single('thesisPDF'), update);
 router.delete('/:thesisId', checkAuth, remove);
+router.get('/download/:fileName', downloadThesis);
 
 export default router;

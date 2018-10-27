@@ -1,9 +1,7 @@
 import React, { Component } from 'react'; 
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-
 import Theses from './Theses';
 import Layout from './Layout';
-
 
 class App extends Component {  
   render() {
@@ -19,6 +17,5 @@ class App extends Component {
     );
   }
 }
-
 
 export default App;

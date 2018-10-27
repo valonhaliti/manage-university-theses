@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LeftNav from './LeftNav';
-
 import Header from './Header';
 
 const styles = theme => ({

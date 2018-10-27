@@ -13,8 +13,8 @@ class ThesisList extends Component {
   }
 
   async componentDidMount() {
-    const response = await axios.get('http://localhost:3001/thesis');
-    this.setState({ theses: response.data.data });
+    const { data: { data } } = await axios.get('/api/thesis');
+    this.setState({ theses: data });
   }
 
   render() {
@@ -24,7 +24,7 @@ class ThesisList extends Component {
           <Grid container spacing={24} style={{padding: 24}}>
             {this.state.theses.map((thesis, idx) => (
               <Grid item xs={12} sm={6} lg={4} xl={3}>
-                <Thesis key={idx} title={thesis.title} description={thesis.description} />
+                <Thesis key={idx} {...thesis} />
               </Grid>
             ))}
           </Grid>
