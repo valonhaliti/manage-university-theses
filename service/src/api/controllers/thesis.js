@@ -4,7 +4,6 @@ import '@babel/polyfill';
 import thesis from '../model/thesis';
 import thesisToUser from '../model/thesisToUser';
 import thesisToKeyword from '../model/thesisToKeyword';
-import axios from 'axios';
 
 export const create = asyncHandler(async (req, res, next) => {
   const thesisObj = removeFalseyValues({
@@ -80,4 +79,8 @@ export const update = asyncHandler(async (req, res, next) => {
 export const remove = asyncHandler(async (req, res, next) => {
   await thesis.delete(req.params.thesisId);
   return res.status(201).json({ message: 'Successfully deleted!' });
+});
+
+export const downloadThesis = asyncHandler(async (req, res, next) => {
+  res.download(`${process.env.PWD}/uploads/${req.params.fileName}`);
 });

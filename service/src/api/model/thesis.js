@@ -12,7 +12,11 @@ export default class {
   }
 
   static async list() {
-    const rows = await db.query('SELECT id, title, description, category, filepath FROM thesis WHERE is_deleted = 0;');
+    let query = 'SELECT id, title, description, category, filepath, status, created_date as createdDate, professor_id, student_id ';
+    query += 'FROM thesis LEFT JOIN thesis_to_user ON thesis.id = thesis_to_user.thesis_id ';
+    query += 'WHERE thesis.is_deleted = 0 ORDER BY createdDate DESC;'
+    
+    const rows = await db.query(query);
     return rows;
   }
 
