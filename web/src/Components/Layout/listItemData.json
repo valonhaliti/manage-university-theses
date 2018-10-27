@@ -1,0 +1,29 @@
+[
+  {
+    "listItemKey": "add-new-thesis",
+    "link": "create",
+    "icon": "AddIcon",
+    "text": "Ngarko temën"
+  },
+  {
+    "divider": true
+  },
+  {
+    "listItemKey": "latest-thesis",
+    "link": "thesis",
+    "icon": "InfoIcon",
+    "text": "Temat e fundit"
+  },
+  {
+    "listItemKey": "pending-thesis",
+    "link": "thesisByStatus/0",
+    "icon": "PendingThesesIcon",
+    "text": "Temat në shqyrtim"
+  },
+  {
+    "listItemKey": "approved-thesis",
+    "link": "thesisByStatus/2",
+    "icon": "ApprovedThesesIcon",
+    "text": "Temat e aprovuara"
+  }
+]

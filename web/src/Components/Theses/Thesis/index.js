@@ -47,10 +47,10 @@ function Thesis({ classes, title, description, category, status: stateOfThesis, 
       <Card className={classes.card}>
         <CardActionArea>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h2" >
+            <Typography variant="h5" component="h2" >
               {title}
             </Typography>
-            <Typography gutterBottom variant="subheader1" >
+            <Typography gutterBottom variant="subtitle1" >
               {category} - {moment(createdDate).format('LL')}
             </Typography>
             <Typography gutterBottom component="p">
@@ -66,7 +66,7 @@ function Thesis({ classes, title, description, category, status: stateOfThesis, 
             alignItems="center"
           >
             <Grid item>
-            <Chip label={chipData.label} color={chipData.color} />
+              <Chip label={chipData.label} color={chipData.color} />
             </Grid>
             <Grid item>
               <a className={classes.anchorDownload} href={`/api/thesis/download/${fileName}`} target="_blank" rel="noopener noreferrer">
@@ -75,7 +75,6 @@ function Thesis({ classes, title, description, category, status: stateOfThesis, 
                   Shkarko
                 </Button>
               </a>
-              
             </Grid>
             <Grid item>
               <Button size="small" color="primary" variant="outlined" >

@@ -1,22 +1,14 @@
 import React, { Component } from 'react'; 
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem'
 import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import { compose } from 'recompose'
-import AddIcon from '@material-ui/icons/AddCircle';
-import PendingThesesIcon from '@material-ui/icons/ThumbsUpDown';
-import ApprovedTheses from '@material-ui/icons/DoneOutline';
-import InfoIcon from '@material-ui/icons/Info'
-
+import listItems from './listItemData.json';
+import ListItemComponent from './ListItemComponent';
+let dividerKey = 0;
 const drawerWidth = 240;
 const styles = theme => ({
   root: {
@@ -43,7 +35,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
-class LeftNav extends Component {  
+class LeftNav extends Component { 
   render() {
     const { classes, location: { pathname } } = this.props;
     return (
@@ -56,38 +48,16 @@ class LeftNav extends Component {
         >
           <div className={classes.toolbar} />
           <List>
-            <ListItem 
-              component={Link} 
-              to="/ngarko" 
-              button 
-              key="add-new-thesis"
-              selected={'/ngarko' === pathname}
-            >        
-              <ListItemIcon> <AddIcon color="primary" /> </ListItemIcon>
-              <ListItemText primary="Ngarko temën" />              
-            </ListItem>
-            <Divider />
-            <ListItem 
-              button 
-              key="pending-thesis" 
-              component={Link} 
-              to="/theses"
-              selected={'/theses' === pathname}
-            > 
-              <ListItemIcon> <InfoIcon /> </ListItemIcon>
-              <ListItemText primary="Temat e fundit" />              
-            </ListItem>
-            <ListItem 
-              button 
-              key="pending-thesis"> 
-              <ListItemIcon> <PendingThesesIcon /> </ListItemIcon>
-              <ListItemText primary="Temat në shqyrtim" />              
-            </ListItem>
-            <ListItem button key="approved-thesis"> 
-              <ListItemIcon> <ApprovedTheses /> </ListItemIcon>
-              <ListItemText primary="Temat e aprovuara" />              
-            </ListItem>
-          
+            {listItems.map(listItem => {
+              if (listItem.divider) return <Divider key={++dividerKey} />
+              return <ListItemComponent 
+                key={listItem.listItemKey}
+                link={listItem.link}
+                text={listItem.text}
+                icon={listItem.icon}
+                isSelected={`/${listItem.link}` === pathname}
+              />
+            })}
           </List>
         </Drawer>
     );
