@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Thesis from './Thesis';
 import Grid from '@material-ui/core/Grid';
-
+import Thesis from './Thesis';
 import axios from 'axios';
 
 class ThesisList extends Component {
@@ -18,18 +17,17 @@ class ThesisList extends Component {
   }
 
   render() {
+    const { match: { params } } = this.props;
     return (
       <div>
-        {this.state.theses ? (
-          <Grid container spacing={24} style={{padding: 24}}>
-            {this.state.theses.map((thesis, idx) => (
-              <Grid item xs={12} sm={6} lg={4} xl={3}>
+        <Grid container spacing={24} style={{padding: 24}}>
+          {this.state.theses
+            .filter(thesis => params.status !== undefined ? thesis.status === Number(params.status) : true)
+            .map((thesis, idx) => (
+              <Grid key={idx} item xs={12} sm={6} lg={4} xl={3}>
                 <Thesis key={idx} {...thesis} />
-              </Grid>
-            ))}
-          </Grid>
-        ) : null}
-        
+              </Grid>))}
+        </Grid>
       </div>
     )
   }

@@ -1,14 +1,12 @@
 const proxy = require('http-proxy-middleware');
 
 const options = {
-  pathRewrite: {
-    '^/api': ''
+  pathRewrite: { 
+    '^/api': '' 
   },
+  target: 'http://localhost:3001',
 }
 
 module.exports = function(app) {
-  app.use(proxy('/api', { 
-    target: 'http://localhost:3001', 
-    pathRewrite: { '^/api': '' }
-  }));
+  app.use(proxy('/api', options));
 };
