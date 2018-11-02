@@ -16,7 +16,6 @@ import moment from 'moment';
 import chipDataConfig from './chipDataConfig';
 import 'moment/locale/sq';
 
-
 moment.locale('sq');
 
 const styles = theme => ({
