@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Theses from './Theses';
 import Layout from './Layout';
-import Form from './Forms';
+import Form from './Forms/uploadThesis';
 
 class App extends Component {  
   render() {
