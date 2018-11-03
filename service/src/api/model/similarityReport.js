@@ -12,4 +12,9 @@ export default class {
       return res;
     }
   }
+
+  static async get(thesisId) {
+    const rows = await db.query('SELECT * FROM `similarity_report` WHERE thesis_id = ?;', thesisId);
+    return rows;
+  }
 }

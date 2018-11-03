@@ -36,9 +36,21 @@ export const create = asyncHandler(async (req, res, next) => {
 
 export const get = asyncHandler(async (req, res, next) => {
   const { thesisId } = req.params;
-  const response = await thesis.get(thesisId);
+  let response = await thesis.get(thesisId);
+
+  let finalResponse = Object.assign({}, response[0]);
+  finalResponse.keywords = [];
+  
+  if (response.length === 1) {
+    finalResponse.keywords.push(response[0].keyword);
+  } else if (response.length > 1) {
+    for (const item of response) {
+      finalResponse.keywords.push(item.keyword)
+    } 
+  }
+
   if (response.length > 0)
-    return res.status(200).json({ message: 'Data fetched with success.', data: response });
+    return res.status(200).json({ message: 'Data fetched with success.', data: [ finalResponse ] });
   else
     return res.status(404).json({ message: 'Thesis not found' });
 });
