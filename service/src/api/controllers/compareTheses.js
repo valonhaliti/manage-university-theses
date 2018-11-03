@@ -21,10 +21,14 @@ export const compareThesisWithAll = asyncHandler(async (req, res, next)  => {
   ratings = sortBy(ratings, 'rating');
 
   const top3Ratings = ratings.length < 3 ? ratings : ratings.slice(ratings.length - 3);
+  const final3 = [];
+  for (let i = top3Ratings.length - 1; i >= 0; i--) {
+    final3.push(top3Ratings[i])
+  }
 
   similarityReportModel.createOrUpdate({
     thesis_id: thesisId,
-    ratings: JSON.stringify(top3Ratings), // we want to save only the best three ratings in database
+    ratings: JSON.stringify(final3), // we want to save only the best three ratings in database
     best_match: JSON.stringify(bestMatch),
     last_modified_date: new Date()
   });
@@ -32,4 +36,13 @@ export const compareThesisWithAll = asyncHandler(async (req, res, next)  => {
   return res.status(200).json({
     ratings, bestMatch
   });
+});
+
+export const getSimilarity = asyncHandler(async (req, res, next) => {
+  const { thesisId } = req.params;
+
+  const response = await similarityReportModel.get(thesisId);
+  return res.status(200).json({
+    data: response
+  })
 });

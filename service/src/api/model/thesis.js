@@ -7,7 +7,18 @@ export default class {
   }
 
   static async get(thesisId) {
-    const rows = await db.query('SELECT * FROM thesis WHERE is_deleted = 0 AND id = ?;', thesisId);
+    let query = 'SELECT thesis.*,' 
+    query += ' prof.id AS professorId, prof.firstname AS professorFirstName, prof.lastname AS professorLastName,' 
+    query += ' student.id AS studentId, student.firstname AS studentFirstName, student.lastname AS studentLastName,'
+    query += ' keyword.name AS keyword'
+    query += ' FROM thesis '
+    query += ' LEFT JOIN thesis_to_user ON thesis.id = thesis_to_user.thesis_id'
+    query += ' LEFT JOIN user prof ON thesis_to_user.professor_id = prof.id'
+    query += ' LEFT JOIN user student ON thesis_to_user.student_id = student.id'
+    query += ' LEFT JOIN thesis_to_keyword ON thesis.id = thesis_to_keyword.thesis_id'
+    query += ' LEFT JOIN keyword ON keyword.id = thesis_to_keyword.keyword_id'
+    query += ' WHERE thesis.id = ? AND thesis.is_deleted = 0;'
+    const rows = await db.query(query, thesisId);
     return rows;
   }
 

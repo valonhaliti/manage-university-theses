@@ -1,8 +1,9 @@
 import express from 'express';
-import { compareThesisWithAll } from '../controllers/compareTheses'
+import { compareThesisWithAll, getSimilarity } from '../controllers/compareTheses'
 
 const router = express.Router();
 
-router.get('/comparewithall/:thesisId', compareThesisWithAll);
+router.get('/compareWithAll/:thesisId', compareThesisWithAll);
+router.get('/getSimilarity/:thesisId', getSimilarity);
 
 export default router;

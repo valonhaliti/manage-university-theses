@@ -323,7 +323,6 @@ class Form extends React.Component {
 
             <Paper className={classes.root} elevation={1}>
             <input
-              accept="image/*"
               className={classes.input}
               id="outlined-button-file"
               // value={this.state.thesisFile}              

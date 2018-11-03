@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 app.use('/user', userRouter);
 app.use('/thesis', thesisRouter);
-app.use('/comparetheses', compareThesesRouter);
+app.use('/compareTheses', compareThesesRouter);
 app.use('/keyword', keywordRouter);
 
 

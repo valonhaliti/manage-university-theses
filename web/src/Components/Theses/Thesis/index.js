@@ -12,6 +12,7 @@ import FileCopy from '@material-ui/icons/FileCopy';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import { truncateWithEllipses } from '../../../utils/truncate';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import chipDataConfig from './chipDataConfig';
 import 'moment/locale/sq';
@@ -37,7 +38,7 @@ const styles = theme => ({
   }
 })
 
-const Thesis = ({ classes, title, description, category, status: stateOfThesis, filepath, createdDate }) => {
+const Thesis = ({ classes, id: thesisId, title, description, category, status: stateOfThesis, filepath, createdDate }) => {
   const chipData = chipDataConfig[stateOfThesis];
   const fileName = filepath && filepath.split('\\')[1];
 
@@ -65,7 +66,7 @@ const Thesis = ({ classes, title, description, category, status: stateOfThesis, 
             alignItems="center"
           >
             <Grid item>
-              <Chip label={chipData.label} color={chipData.color} />
+              <Chip label={chipData && chipData.label} color={chipData && chipData.color} />
             </Grid>
             <Grid item>
               <a className={classes.anchorDownload} href={`/api/thesis/download/${fileName}`} target="_blank" rel="noopener noreferrer">
@@ -76,7 +77,7 @@ const Thesis = ({ classes, title, description, category, status: stateOfThesis, 
               </a>
             </Grid>
             <Grid item>
-              <Button size="small" color="primary" variant="outlined" >
+              <Button component={Link} to={`/thesis/${thesisId}`} size="small" color="primary" variant="outlined" >
                 Më shumë
               </Button>
             </Grid>
