@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import userRouter from './api/routes/user';
 import thesisRouter from './api/routes/thesis';
 import compareThesesRouter from './api/routes/compareTheses';
+import keywordRouter from './api/routes/keyword';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -32,6 +33,8 @@ app.use((req, res, next) => {
 app.use('/user', userRouter);
 app.use('/thesis', thesisRouter);
 app.use('/comparetheses', compareThesesRouter);
+app.use('/keyword', keywordRouter);
+
 
 app.use((req, res, next) => {
   const error = new Error("not found");

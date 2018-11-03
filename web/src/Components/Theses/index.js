@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
+import Loader from '../Layout/Loader';
 import Thesis from './Thesis';
 import axios from 'axios';
 
@@ -19,7 +20,8 @@ class ThesisList extends Component {
   render() {
     const { match: { params } } = this.props;
     return (
-      <div>
+      <>
+        {this.state.theses.length === 0 ? <Loader /> : null}
         <Grid container spacing={24} style={{padding: 24}}>
           {this.state.theses
             .filter(thesis => params.status !== undefined ? thesis.status === Number(params.status) : true)
@@ -28,7 +30,7 @@ class ThesisList extends Component {
                 <Thesis key={idx} {...thesis} />
               </Grid>))}
         </Grid>
-      </div>
+      </>
     )
   }
 }

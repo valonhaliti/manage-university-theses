@@ -8,7 +8,7 @@ import ApprovedThesesIcon from '@material-ui/icons/DoneOutline';
 import InfoIcon from '@material-ui/icons/Info'
 import { Link } from 'react-router-dom';
 
-const getIcon = (nameOfIcon) => {
+const getIcon = nameOfIcon => {
   switch (nameOfIcon) {
     case 'AddIcon':
       return <AddIcon color="primary" />;
@@ -23,7 +23,8 @@ const getIcon = (nameOfIcon) => {
   }
 }
 
-const ListItemComponent = (props) => {
+
+export default props => {
   const { link, listItemKey, isSelected, text, icon } = props;
   return <ListItem 
     component={Link} 
@@ -36,5 +37,3 @@ const ListItemComponent = (props) => {
     <ListItemText primary={text} />              
   </ListItem> 
 }
-
-export default ListItemComponent;
