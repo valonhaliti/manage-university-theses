@@ -29,26 +29,25 @@ const styles = theme => ({
   },
 });
 
-const ThesisCard = ({ id, title, rating, target, classes}) => {
-  return <Card className={classes.card}>
-    <CardContent>
-      <Typography variant="h5" component="h2">
-        {title}
-      </Typography>
-      <Typography className={classes.title} color="textSecondary" gutterBottom>
-        Ngjashmëria: {(rating*100).toFixed(2)}%
-      </Typography>
-      <Typography component="p">
-        {truncateWithEllipses(target)}
-      </Typography>
-    </CardContent>
-    <CardActions>
-      <a className={classes.anchorDownload} href={`/thesis/${id}`} target="_blank" rel="noopener noreferrer">
-        <Button color="primary" size="small">Më shumë</Button>
-      </a>
-    </CardActions>
-  </Card>
-}
+const ThesisCard = ({ id, title, rating, target, classes }) => <Card className={classes.card}>
+  <CardContent>
+    <Typography variant="h5" component="h2">
+      {title}
+    </Typography>
+    <Typography className={classes.title} color="textSecondary" gutterBottom>
+      Ngjashmëria: {(rating*100).toFixed(2)}%
+    </Typography>
+    <Typography component="p">
+      {truncateWithEllipses(target)}
+    </Typography>
+  </CardContent>
+  <CardActions>
+    <a className={classes.anchorDownload} href={`/thesis/${id}`} target="_blank" rel="noopener noreferrer">
+      <Button color="primary" size="small">Më shumë</Button>
+    </a>
+  </CardActions>
+</Card>
+
 
 ThesisCard.propTypes = {
   classes: PropTypes.object.isRequired

@@ -5,6 +5,7 @@ import { regexpEmail } from '../constants';
 import { removeFalseyValues } from '../utils/utilFunctionsForAPIs';
 import '@babel/polyfill';
 import user from '../model/user';
+import { verifyToken } from './auth';
 
 export const signUp = asyncHandler(async (req, res, next) => {
   if (!regexpEmail.test(req.body.email)) {
@@ -44,6 +45,13 @@ export const signUp = asyncHandler(async (req, res, next) => {
 });
 
 export const signIn = asyncHandler(async (req, res, next) => {
+  if (req.headers.authorization) {
+    const response = verifyToken(req.headers.authorization);
+    return res.status(200).json({
+      decoded: response
+    })
+  }
+
   const userResponse = await user.getFromEmail(req.body.email);
   if (userResponse.length === 0) {
     return res.status(401).json({
@@ -60,7 +68,7 @@ export const signIn = asyncHandler(async (req, res, next) => {
         },
         process.env.JWT_KEY,
         {
-          expiresIn: "1h"
+          expiresIn: "24h"
         }
       );
       return res.status(200).json({

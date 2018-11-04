@@ -22,7 +22,7 @@ import Chip from '@material-ui/core/Chip';
 import AddIcon from '@material-ui/icons/AddCircle';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
+import { AuthConsumer } from '../../AuthContext';
 
 
 // THIS NEED REFACTORING

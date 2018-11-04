@@ -16,6 +16,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import { AuthConsumer } from '../../AuthContext';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   grow: {
@@ -29,6 +31,10 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
+  },
+  button: {
+    color: 'inherit',
+    margin: theme.spacing.unit,
   },
   search: {
     position: 'relative',
@@ -159,7 +165,9 @@ class Header extends React.Component {
     );
 
     return (
-      <div className={classes.root}>
+      <AuthConsumer>
+      {({ isAuth }) => (
+        <div className={classes.root}>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <Typography style={{ textDecoration: 'none'}} component={Link} to="/" className={classes.title} variant="h6" color="inherit" noWrap>
@@ -179,7 +187,7 @@ class Header extends React.Component {
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
+              {/* <IconButton color="inherit">
                 <Badge className={classes.margin} badgeContent={4} color="secondary">
                   <MailIcon />
                 </Badge>
@@ -188,15 +196,28 @@ class Header extends React.Component {
                 <Badge className={classes.margin} badgeContent={17} color="secondary">
                   <NotificationsIcon />
                 </Badge>
-              </IconButton>
-              <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : null}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+              </IconButton> */}
+              {
+                isAuth 
+                ? 
+                  <IconButton
+                    aria-owns={isMenuOpen ? 'material-appbar' : null}
+                    aria-haspopup="true"
+                    onClick={this.handleProfileMenuOpen}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton> 
+                : 
+                  <Button 
+                    variant="outlined"
+                    className={classes.button}
+                    component={Link} to="/login"
+                  >
+                    Kyçu
+                  </Button>
+              }
+              
             </div>
             <div className={classes.sectionMobile}>
               <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
@@ -208,6 +229,9 @@ class Header extends React.Component {
         {renderMenu}
         {renderMobileMenu}
       </div>
+      )}  
+      </AuthConsumer>
+      
     );
   }
 }
