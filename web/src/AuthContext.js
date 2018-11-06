@@ -14,9 +14,12 @@ class AuthProvider extends Component {
           this.setState({
             isAuth: true
           });
+          localStorage.setItem('userId', response.data.decoded.userId)
         }
       } catch (err) {
-        console.log('errr1', err);
+        this.setState({
+          isAuth: false
+        });
       } 
     }
   }
@@ -27,12 +30,22 @@ class AuthProvider extends Component {
     });
   }
 
+  logOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+  
+    this.setState({
+      isAuth: false
+    });
+  }
+
   render() {
     return (
       <AuthContext.Provider
         value={{ 
           isAuth: this.state.isAuth,
-          login: this.login
+          login: this.login,
+          logOut: this.logOut
         }} 
       >
         {this.props.children}

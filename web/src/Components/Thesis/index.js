@@ -13,6 +13,12 @@ import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import FileCopy from '@material-ui/icons/FileCopy';
 import SimilarityThesis from './SimilarityThesis';
+import EditIcon from '@material-ui/icons/Edit';
+import Divider  from '@material-ui/core/Divider';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const styles = theme => ({
   root: {
@@ -23,9 +29,17 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
     color: theme.palette.text.secondary,
     width: '100%'
+  }, 
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120
   },
   chip: {
     margin: theme.spacing.unit,
+  },
+  button: {
+    marginTop: theme.spacing.unit *3,
+    marginRight: theme.spacing.unit*3,
   },
   anchorDownload: {
     textDecorationLine: 'none',
@@ -40,6 +54,12 @@ const styles = theme => ({
   },
 });
 
+const axiosConfig = {
+  headers: {
+    Authorization: ''
+  }
+}
+
 class Thesis extends Component {
   constructor() {
     super();
@@ -52,9 +72,17 @@ class Thesis extends Component {
       mentorId: '',
       mentorName: '',
       similarityReport: '',
+      statusOfThesis: '',
+      showStatusEditForm: false,
       keywords: []
     }
+    axiosConfig.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+    console.log(axiosConfig);
   }
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
   async componentDidMount() {
     const { match: { params } } = this.props;
@@ -66,6 +94,7 @@ class Thesis extends Component {
       studentId, studentFirstName, studentLastName,
       keywords
     } = data[0];
+
 
     this.setState({
       title, abstract, category, status, created_date, 
@@ -92,6 +121,29 @@ class Thesis extends Component {
     });
   }
 
+  showStatusEditForm = () => {
+    this.setState({
+      showStatusEditForm: !this.state.showStatusEditForm
+    });
+  }
+
+  changeStatus = async (e) => {
+    e.preventDefault();
+    const { match: { params } } = this.props;
+    const { thesisId } = params;
+
+    const updateBody = { statusOfThesis: this.state.statusOfThesis }
+    try {
+      await axios.put(`/api/thesis/${thesisId}`, updateBody, axiosConfig);
+      this.setState({
+        showStatusEditForm: false,
+        status: this.state.statusOfThesis 
+      });
+    } catch (err) {
+      console.log('err trying to update status');
+    }
+  }
+
   render() {
     const { classes } = this.props;
     const { 
@@ -100,6 +152,7 @@ class Thesis extends Component {
       studentId, studentName,
       similarityReport, filepath
     } = this.state;
+    const userId = localStorage.getItem('userId') && Number(localStorage.getItem('userId'));
     const fileName = filepath && filepath.split('\\')[1];
     const chipData = chipDataConfig[status];
 
@@ -118,8 +171,8 @@ class Thesis extends Component {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={2}>
-                <a className={classes.anchorDownload} href={`/api/thesis/download/${fileName}`} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outlined" size="small" className={classes.button}>
+                <a className={classes.anchorDownload} href={fileName ? `/api/thesis/download/${fileName}` : false} target="_blank" rel="noopener noreferrer">
+                  <Button disabled={fileName == null} variant="outlined" size="small" className={classes.button}>
                     <FileCopy className={classNames(classes.leftIcon, classes.iconSmall)}/>
                     Shkarko
                   </Button>
@@ -147,7 +200,7 @@ class Thesis extends Component {
                 </Typography>
                 <Typography paragraph>
                   {keywords.map(keyword => 
-                    <Chip label={keyword} className={classes.chip} />
+                    <Chip variant="outlined" label={keyword} className={classes.chip} />
                   )}
                 </Typography>
               </Grid>
@@ -164,10 +217,43 @@ class Thesis extends Component {
                   Statusi
                 </Typography>
                 <Typography paragraph>
-                  <Chip label={chipData && chipData.label} color={chipData && chipData.color} />
+                  <Chip variant="outlined" label={chipData && chipData.label} color={chipData && chipData.color} />
                 </Typography>
               </Grid>
             </Grid>
+            
+            {userId === mentorId ? (
+              <>
+                <Divider style={{ marginBottom: '20px' }} />
+                <Button onClick={this.showStatusEditForm} variant="outlined" size="small" className={classes.button}>
+                  <EditIcon className={classNames(classes.leftIcon, classes.iconSmall)}/>
+                  Modifikoje statusin
+                </Button>
+                {this.state.showStatusEditForm ? (
+                  <form>
+                  <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="statusOfThesis-simple">Statusi</InputLabel>
+                  <Select
+                    value={this.state.statusOfThesis}
+                    onChange={this.handleChange}
+                    inputProps={{
+                      name: 'statusOfThesis',
+                      id: 'statusOfThesis-simple',
+                    }}
+                  >
+                    {Object.keys(chipDataConfig).map(chip => <MenuItem value={chip}>{chipDataConfig[chip].label}</MenuItem>)}
+                  </Select>
+                  <Button 
+                    onClick={(e) => this.changeStatus(e)}
+                    fullWidth size="small" variant="contained" color="primary" className={classes.button}>
+                    Modifikoje
+                  </Button>
+                  </FormControl>
+                </form>
+                ) : null}
+                
+              </>
+              ): null}
           </Paper>
         </Grid>
         <Grid  justify="center" item xs={12} sm={4}>

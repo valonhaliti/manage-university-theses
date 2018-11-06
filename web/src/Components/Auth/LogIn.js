@@ -13,6 +13,7 @@ import { Redirect } from 'react-router-dom';
 import { AuthConsumer } from '../../AuthContext';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 const styles = theme => ({
   layout: {
@@ -71,6 +72,7 @@ class LogIn extends React.Component {
     try {
       const response = await axios.post('/api/user/login', { email, password });
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userId', jwtDecode(response.data.token).userId);
       login();      
     } catch (err) {
       console.log('err submit form', err);

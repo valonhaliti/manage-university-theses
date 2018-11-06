@@ -87,7 +87,7 @@ class Register extends React.Component {
         redirectToHome: true
       })
     } catch (err) {
-      console.err('error trying to create a new user');
+      console.log('error trying to create a new user', err);
     }
   }
 
@@ -98,7 +98,7 @@ class Register extends React.Component {
     if (redirectToHome) return <Redirect to='/login' />;
 
     return (
-      <React.Fragment>
+      <>
         <AuthConsumer>
           {({ isAuth }) => (
             <main className={classes.layout}>
@@ -190,7 +190,7 @@ class Register extends React.Component {
             </main>
           )}
         </AuthConsumer>
-      </React.Fragment>
+      </>
     );
   }
 }
