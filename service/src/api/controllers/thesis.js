@@ -6,6 +6,11 @@ import thesisToUser from '../model/thesisToUser';
 import thesisToKeyword from '../model/thesisToKeyword';
 
 export const create = asyncHandler(async (req, res, next) => {
+  if (req.userData.userType === 1) {
+    return res.json(500).json({
+      error: 'Vetëm studentët mund të postojnë temë të diplomës.'
+    })
+  }
   const thesisObj = removeFalseyValues({
     title: req.body.title,
     description: req.body.description,
@@ -17,17 +22,18 @@ export const create = asyncHandler(async (req, res, next) => {
   thesisObj.id = responseCreateThesis.id;
   await thesisToUser.create({
     professor_id: req.body.professorId,
-    student_id: req.body.studentId,
+    student_id: req.userData.userId,
     thesis_id: thesisObj.id
   });
-
   if (req.body.keywords) {
-    await thesisToKeyword.create({
-      keywords: JSON.parse(req.body.keywords),
-      thesisId: thesisObj.id
-    });
+    const keywords = JSON.parse(req.body.keywords);
+    if (keywords.length > 0) {
+      await thesisToKeyword.create({
+        keywords,
+        thesisId: thesisObj.id
+      });
+    }
   }
-
   return res.status(201).json({
     message: 'Thesis added in database successfully.',
     data: thesisObj
@@ -66,11 +72,13 @@ export const list = asyncHandler(async (req, res, next) => {
 });
 
 export const update = asyncHandler(async (req, res, next) => {
+  console.log('aa');
   const updateThesis = removeFalseyValues({
     title: req.body.title,
     description: req.body.description,
     category: req.body.category,
-    filepath: req.file && req.file.path
+    filepath: req.file && req.file.path,
+    status: req.body.statusOfThesis
   });
 
   if (Object.keys(updateThesis).length > 0) {

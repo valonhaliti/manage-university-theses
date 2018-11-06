@@ -22,6 +22,7 @@ export const signUp = asyncHandler(async (req, res, next) => {
     type: req.body.type,
     registration_year: req.body.registration_year
   });
+  if (userObj && typeof userObj.registration_year) delete userObj.registration_year;
   try {
     await user.create(userObj);
     return res.status(201).json({
@@ -64,7 +65,8 @@ export const signIn = asyncHandler(async (req, res, next) => {
       const token = jwt.sign(
         {
           email: userResponse[0].email,
-          userId: userResponse[0].id
+          userId: userResponse[0].id,
+          userType: userResponse[0].type
         },
         process.env.JWT_KEY,
         {

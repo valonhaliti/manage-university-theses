@@ -112,13 +112,12 @@ class Header extends React.Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
-  render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const renderMenu = (
+  renderMenu = (logOut) => {
+    const { anchorEl } = this.state;
+    const isMenuOpen = Boolean(anchorEl);
+    
+    return (
       <Menu
         anchorEl={anchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -128,8 +127,16 @@ class Header extends React.Component {
       >
         <MenuItem onClick={this.handleClose}>Profile</MenuItem>
         <MenuItem onClick={this.handleClose}>My account</MenuItem>
+        <MenuItem onClick={logOut}>Çkyçu</MenuItem>
       </Menu>
     );
+  }
+
+  render() {
+    const { anchorEl, mobileMoreAnchorEl } = this.state;
+    const { classes } = this.props;
+    const isMenuOpen = Boolean(anchorEl);
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     const renderMobileMenu = (
       <Menu
@@ -166,7 +173,7 @@ class Header extends React.Component {
 
     return (
       <AuthConsumer>
-      {({ isAuth }) => (
+      {({ isAuth, logOut }) => (
         <div className={classes.root}>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
@@ -187,16 +194,6 @@ class Header extends React.Component {
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              {/* <IconButton color="inherit">
-                <Badge className={classes.margin} badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton color="inherit">
-                <Badge className={classes.margin} badgeContent={17} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton> */}
               {
                 isAuth 
                 ? 
@@ -226,7 +223,7 @@ class Header extends React.Component {
             </div>
           </Toolbar>
         </AppBar>
-        {renderMenu}
+        {this.renderMenu(logOut)}
         {renderMobileMenu}
       </div>
       )}  

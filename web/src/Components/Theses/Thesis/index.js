@@ -15,6 +15,7 @@ import { truncateWithEllipses } from '../../../utils/truncate';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import chipDataConfig from './chipDataConfig';
+import Tooltip from '@material-ui/core/Tooltip';
 import 'moment/locale/sq';
 
 moment.locale('sq');
@@ -38,18 +39,44 @@ const styles = theme => ({
   }
 })
 
-const Thesis = ({ classes, id: thesisId, title, description, category, status: stateOfThesis, filepath, createdDate }) => {
+const Thesis = ({ 
+  classes, 
+  id: thesisId, 
+  title, 
+  description, 
+  category, 
+  status: stateOfThesis, 
+  filepath, 
+  createdDate,
+  professor_id: mentorId 
+  }) => {
   const chipData = chipDataConfig[stateOfThesis];
   const fileName = filepath && filepath.split('\\')[1];
+
+  const userId = localStorage.getItem('userId') && Number(localStorage.getItem('userId'));
 
   return (
     <div>
       <Card className={classes.card}>
         <CardActionArea>
           <CardContent>
-            <Typography variant="h5" component="h2" >
-              {title}
-            </Typography>
+            {mentorId === userId ? 
+              (
+                <Tooltip title="Kjo temë është nën mentorimin tim" placement="top">
+                  <Typography variant="h5" component="h2" color="primary">
+                    {title}
+                  </Typography>
+                </Tooltip>
+              )
+              :
+              (
+              <Typography variant="h5" component="h2" >
+                {title}
+              </Typography>
+              )
+            }
+            
+            
             <Typography gutterBottom variant="subtitle1" >
               {category} - {moment(createdDate).format('LL')}
             </Typography>
@@ -66,11 +93,11 @@ const Thesis = ({ classes, id: thesisId, title, description, category, status: s
             alignItems="center"
           >
             <Grid item>
-              <Chip label={chipData && chipData.label} color={chipData && chipData.color} />
+              <Chip variant="outlined" label={chipData && chipData.label} color={chipData && chipData.color} />
             </Grid>
             <Grid item>
-              <a className={classes.anchorDownload} href={`/api/thesis/download/${fileName}`} target="_blank" rel="noopener noreferrer">
-                <Button variant="outlined" size="small" className={classes.button}>
+              <a className={classes.anchorDownload} href={fileName ? `/api/thesis/download/${fileName}` : false} target="_blank" rel="noopener noreferrer">
+                <Button disabled={fileName == null} variant="outlined" size="small" className={classes.button}>
                   <FileCopy className={classNames(classes.leftIcon, classes.iconSmall)}/>
                   Shkarko
                 </Button>

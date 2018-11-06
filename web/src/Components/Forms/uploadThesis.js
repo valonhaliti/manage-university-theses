@@ -22,7 +22,6 @@ import Chip from '@material-ui/core/Chip';
 import AddIcon from '@material-ui/icons/AddCircle';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { AuthConsumer } from '../../AuthContext';
 
 
 // THIS NEED REFACTORING
@@ -154,7 +153,16 @@ class Form extends React.Component {
   }
 
   handleClick = async event => {
-    event.preventDefault();    
+    event.preventDefault();
+    let validateInputResponse = this.validateInput();
+    if (validateInputResponse) {
+      this.setState({ 
+        snackBarOpen: true,
+        snackBarVariant: 'error',
+        snackBarMessage: validateInputResponse
+      });
+      return;
+    }
     let keywords = [
       ...this.state.keywords
         .filter(keyword => this.state.keywordsSelected.includes(keyword.name)), 
@@ -174,7 +182,6 @@ class Form extends React.Component {
       fd.append('category', this.state.thesisCategory);
       fd.append('keywords', keywords);
       fd.append('professorId', this.state.thesisProffesorId);
-      fd.append('studentId', 2);
       
       const response = await axios.post('/api/thesis', fd, axiosConfig);
       this.setState({ 
@@ -184,13 +191,22 @@ class Form extends React.Component {
       });
 
     } catch (err) {
-      console.error('error creating thesis', err);
       this.setState({ 
         snackBarOpen: true,
         snackBarVariant: 'error',
         snackBarMessage: 'Pati një gabim gjatë ngarkimit të temës, provoni përsëri.'
       });
     }
+  }
+
+  validateInput = () => {
+    const { thesisTitle, thesisAbstract, thesisProffesorId } = this.state;
+    let msg = (field) => `Tema duhet të ketë një ${field}, mbusheni fushen provoni sërish.`;
+
+    if (!thesisTitle) return msg('titull');
+    else if (!thesisAbstract) return msg('abstrakt');
+    else if (!thesisProffesorId) return msg('mentor');
+    return null;
   }
 
   handleSnackbarClose = (event, reason) => {
@@ -226,6 +242,7 @@ class Form extends React.Component {
               label="Titulli"
               className={classes.textField}
               fullWidth
+              required
               value={this.state.thesisTitle}
               onChange={this.handleChange('thesisTitle')}
               margin="normal"
@@ -235,6 +252,7 @@ class Form extends React.Component {
               id="outlined-multiline-static"
               label="Abstrakti"
               multiline
+              required
               fullWidth
               rows="15"
               value={this.state.thesisAbstract}
@@ -254,7 +272,7 @@ class Form extends React.Component {
               margin="normal"
               variant="outlined"
             />
-            <FormControl fullWidth variant="outlined" className={classes.formControl}>
+            <FormControl required  fullWidth variant="outlined" className={classes.formControl}>
               <InputLabel
                 ref={ref => {
                   this.InputLabelRef = ref;
@@ -340,7 +358,7 @@ class Form extends React.Component {
             </Typography>
           </Paper>
             <Button fullWidth variant="contained" color="primary" className={classes.button} onClick={this.handleClick}>
-              Send
+              Dërgo
               <Icon className={classes.rightIcon}>send</Icon>
             </Button>
           </form>

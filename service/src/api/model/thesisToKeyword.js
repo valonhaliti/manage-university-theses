@@ -57,7 +57,7 @@ export default class {
     const insertKeywordNames = keywords.filter(x => !x.id).map(x => [x.name]);
 
     if (insertKeywordNames.length === 0) {
-      return;
+      return [];
     }
 
     const insertResult = await db.query('INSERT IGNORE INTO `keyword` (`name`) VALUES ?;', [insertKeywordNames]);

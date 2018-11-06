@@ -1,8 +1,7 @@
 import React, { Component } from 'react'; 
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from '../AuthContext';
-import axios from 'axios';
 import LogIn from './Auth/LogIn';
 import Theses from './Theses';
 import Thesis from './Thesis';
@@ -18,7 +17,7 @@ class App extends Component {
       <AuthProvider>
       <Layout>
         <Switch>
-          <Route exact path="/"  render={() => <div>Home</div>}/>
+          <Route exact path="/"  render={() => <Redirect to="thesis" />}/>
           <Route exact path="/thesis" component={Theses}/>
           <Route exact path="/thesisByStatus/:status" render={props => <Theses {...props}/>}/>
           <Route exact path="/thesis/:thesisId" render={props => <Thesis {...props}/>}/>
