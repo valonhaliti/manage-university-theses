@@ -22,7 +22,7 @@ export const signUp = asyncHandler(async (req, res, next) => {
     type: req.body.type,
     registration_year: req.body.registration_year
   });
-  if (userObj && typeof userObj.registration_year) delete userObj.registration_year;
+  if (userObj && typeof userObj.registration_year !== 'number') delete userObj.registration_year;
   try {
     await user.create(userObj);
     return res.status(201).json({

@@ -14,11 +14,13 @@ import Button from '@material-ui/core/Button';
 import FileCopy from '@material-ui/icons/FileCopy';
 import SimilarityThesis from './SimilarityThesis';
 import EditIcon from '@material-ui/icons/Edit';
+import Delete from '@material-ui/icons/Delete';
 import Divider  from '@material-ui/core/Divider';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import AlertDialog from '../Style/AlertDialog';
 
 const styles = theme => ({
   root: {
@@ -74,14 +76,44 @@ class Thesis extends Component {
       similarityReport: '',
       statusOfThesis: '',
       showStatusEditForm: false,
-      keywords: []
+      keywords: [],
+      agreeToDelete: false,
+      agreeToDeleteDialogOpen: false,
     }
     axiosConfig.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
-    console.log(axiosConfig);
   }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+  };
+
+  deleteThesis = async event => {
+    const { match: { params } } = this.props;
+    const { thesisId } = params;
+    
+    try {
+      await axios.delete(`/api/thesis/${thesisId}`, axiosConfig);
+      this.setState({
+        agreeToDeleteDialogOpen: false
+      });
+    } catch (err) {
+      console.log('error deleting thesis');
+      console.log(err);
+    }
+  }
+
+  agreeToDelete = () => {
+    this.setState({
+      agreeToDelete: true
+    })
+  }
+
+  handleClickAlertOpen = () => {
+    this.setState({ agreeToDeleteDialogOpen: true })
+  };
+
+  handleAlertClose = () => {
+    this.setState({ agreeToDeleteDialogOpen: false });
   };
 
   async componentDidMount() {
@@ -117,7 +149,7 @@ class Thesis extends Component {
       similarityReport = await axios.get(`/api/compareTheses/getSimilarity/${thesisId}`)
     }
     this.setState({
-      similarityReport: similarityReport.data.data[0].ratings
+      similarityReport: similarityReport.data.data[0] && similarityReport.data.data[0].ratings
     });
   }
 
@@ -145,7 +177,8 @@ class Thesis extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, match: { params } } = this.props;
+    const { thesisId } = params;
     const { 
       title, abstract, category, created_date, status, keywords,
       mentorId, mentorName,
@@ -254,6 +287,19 @@ class Thesis extends Component {
                 
               </>
               ): null}
+              {userId === studentId ? (
+                <>
+                <Divider />
+                <Button component={Link} to={`/thesis/update/${thesisId}`} variant="outlined" size="small" className={classes.button}>
+                  <EditIcon className={classNames(classes.leftIcon, classes.iconSmall)}/>
+                  Modifiko
+                </Button>
+                <Button onClick={this.handleClickAlertOpen} variant="outlined" size="small" className={classes.button}>
+                  <Delete className={classNames(classes.leftIcon, classes.iconSmall)}/>
+                  Fshij
+                </Button>
+                </>
+              ) : null}
           </Paper>
         </Grid>
         <Grid  justify="center" item xs={12} sm={4}>
@@ -262,6 +308,7 @@ class Thesis extends Component {
           </Paper>
         </Grid>
       </Grid>
+      <AlertDialog handleClickAlertOpen={this.handleClickAlertOpen} handleAlertClose={this.handleAlertClose}  deleteThesis={this.deleteThesis} open={this.state.agreeToDeleteDialogOpen} />
     </>
   }
 }

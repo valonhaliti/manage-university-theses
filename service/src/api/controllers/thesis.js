@@ -72,7 +72,6 @@ export const list = asyncHandler(async (req, res, next) => {
 });
 
 export const update = asyncHandler(async (req, res, next) => {
-  console.log('aa');
   const updateThesis = removeFalseyValues({
     title: req.body.title,
     description: req.body.description,
