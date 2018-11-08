@@ -18,6 +18,9 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { AuthConsumer } from '../../AuthContext';
 import Button from '@material-ui/core/Button';
+import { compose } from 'recompose';
+import { withRouter } from 'react-router-dom';
+
 
 const styles = theme => ({
   grow: {
@@ -93,6 +96,7 @@ class Header extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+    searchQuery: ''
   };
 
   handleProfileMenuOpen = event => {
@@ -112,6 +116,15 @@ class Header extends React.Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value
+    })
+  }
+
+  search = () => {
+    this.props.history.push(`/search/${this.state.searchQuery}`);
+  }  
 
   renderMenu = (logOut) => {
     const { anchorEl } = this.state;
@@ -190,6 +203,9 @@ class Header extends React.Component {
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
+                value={this.state.searchQuery}
+                onChange={this.handleChange('searchQuery')}
+                onKeyPress={event => { if (event.key === 'Enter') this.search() }}
               />
             </div>
             <div className={classes.grow} />
@@ -237,4 +253,8 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Header);
+export default compose(
+  withRouter,
+  withStyles(styles)
+)(Header);
+

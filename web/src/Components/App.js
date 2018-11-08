@@ -9,6 +9,7 @@ import Layout from './Layout';
 import Form from './Forms/uploadThesis';
 import UpdateThesis from './Forms/updateThesis';
 import Register from './Auth/Register';
+import ThesesSearchPage from './Theses/ThesesSearchPage';
 
 
 class App extends Component {  
@@ -25,6 +26,7 @@ class App extends Component {
               <Route exact path="/thesis/update/:thesisId" render={props => <UpdateThesis {...props}/>}/>
               <PrivateRoute exact path ="/create" component={Form} />
               <Route exact path ="/login" component={LogIn} />
+              <Route exact path ="/search/:searchQuery" component={ThesesSearchPage} />
               <Route exact path ="/register" component={Register} />
             </Switch>
           </Layout>
