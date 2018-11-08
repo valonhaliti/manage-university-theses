@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import Grid from '@material-ui/core/Grid';
-import Loader from '../Layout/Loader';
-import Thesis from './Thesis';
+import ThesesGrid from './ThesesGrid';
 import axios from 'axios';
 
 class ThesisList extends Component {
-  constructor() {
-    super();
-    this.state = {
-      theses: []
-    }
+  state = {
+    theses: []
   }
 
   async componentDidMount() {
@@ -19,19 +14,7 @@ class ThesisList extends Component {
 
   render() {
     const { match: { params } } = this.props;
-    return (
-      <>
-        {this.state.theses.length === 0 ? <Loader /> : null}
-        <Grid container spacing={24} style={{padding: 24}}>
-          {this.state.theses
-            .filter(thesis => params.status !== undefined ? thesis.status === Number(params.status) : true)
-            .map((thesis, idx) => (
-              <Grid key={idx} item xs={12} sm={6} lg={4} xl={3}>
-                <Thesis key={idx} {...thesis} />
-              </Grid>))}
-        </Grid>
-      </>
-    )
+    return <ThesesGrid params={params} theses={this.state.theses} />
   }
 }
 

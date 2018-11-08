@@ -2,17 +2,19 @@ import dotenv from 'dotenv';
 dotenv.config()
 import express from 'express';
 import morgan from 'morgan';
+import logger, { LoggerStream } from './api/utils/logger';
 import bodyParser from 'body-parser';
 
 import userRouter from './api/routes/user';
 import thesisRouter from './api/routes/thesis';
 import compareThesesRouter from './api/routes/compareTheses';
 import keywordRouter from './api/routes/keyword';
+import searchRouter from './api/routes/search';
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(morgan('dev'));
+app.use(morgan('combined', { stream: new LoggerStream() }));
 app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -34,6 +36,7 @@ app.use('/user', userRouter);
 app.use('/thesis', thesisRouter);
 app.use('/compareTheses', compareThesesRouter);
 app.use('/keyword', keywordRouter);
+app.use('/search', searchRouter);
 
 
 app.use((req, res, next) => {
@@ -44,6 +47,7 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
   res.status(error.status || 500);
+  logger.error(error);
   res.json({
     error: {
       message: error.message
@@ -51,11 +55,12 @@ app.use((error, req, res, next) => {
   })
 });
 
+
 app.listen(port, (err) => {
   if (err) {
-    console.log('Error in starting server', err);
+    logger.error('Error in starting server', err);
   }
-  console.log(`listening in ${port}`);
+  logger.info(`listening in ${port}`);
 });
 
 // export for testing

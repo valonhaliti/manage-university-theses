@@ -1,8 +1,8 @@
 import express from 'express';
-import { list } from "../controllers/keyword";
+import { search } from "../controllers/search";
 
 const router = express.Router();
 
-router.get('/', list);
+router.get('/', search);
 
 export default router;
