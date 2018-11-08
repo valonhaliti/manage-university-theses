@@ -11,7 +11,8 @@
     "localtunnel": "lt --port 3001 --subdomain service",
     "build": "./node_modules/.bin/babel src --out-dir lib --require babel/polyfill",
     "share": "npm-run-all --parallel start localtunnel",
-    "compile": "./node_modules/.bin/babel src --out-dir .compiled --source-maps --watch"
+    "compile": "./node_modules/.bin/babel src --out-dir .compiled --source-maps --watch",
+    "showerror": "jv error.log"
   },
   "author": "Valon Haliti",
   "license": "ISC",

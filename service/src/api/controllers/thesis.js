@@ -100,6 +100,18 @@ export const remove = asyncHandler(async (req, res, next) => {
   return res.status(201).json({ message: 'Successfully deleted!' });
 });
 
+export const getByUser = asyncHandler(async (req, res, next) => {
+  const { userId } = req.params;
+  console.log({userId});
+  let response = await thesis.getByUser(userId);
+  response = {
+    message: 'Data fetched with success',
+    count: response.length,
+    data: response
+  };
+  return res.status(200).json(response);
+});
+
 export const downloadThesis = asyncHandler(async (req, res, next) => {
   res.download(`${process.env.PWD}/uploads/${req.params.fileName}`);
 });

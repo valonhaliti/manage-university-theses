@@ -34,9 +34,10 @@ const ThesisCard = ({ id, title, rating, target, classes }) => <Card className={
     <Typography variant="h5" component="h2">
       {title}
     </Typography>
-    <Typography className={classes.title} color="textSecondary" gutterBottom>
+    {rating ? <Typography className={classes.title} color="textSecondary" gutterBottom>
       Ngjashmëria: {(rating*100).toFixed(2)}%
-    </Typography>
+    </Typography> : null
+    }
     <Typography component="p">
       {truncateWithEllipses(target)}
     </Typography>
