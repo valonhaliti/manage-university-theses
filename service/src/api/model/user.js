@@ -7,7 +7,7 @@ export default class {
   }
 
   static async get(userId) {
-    const rows = await db.query('SELECT id, firstname, lastname, email, registration_year FROM user where is_deleted = 0 AND id = ?;', userId);
+    const rows = await db.query('SELECT id, firstname, lastname, email, registration_year, type FROM user where is_deleted = 0 AND id = ?;', userId);
     return rows;
   }
 

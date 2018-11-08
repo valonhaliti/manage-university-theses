@@ -37,6 +37,7 @@ class AuthProvider extends Component {
     this.setState({
       isAuth: false
     });
+    window.location.reload();
   }
 
   render() {

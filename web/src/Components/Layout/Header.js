@@ -122,6 +122,10 @@ class Header extends React.Component {
     })
   }
 
+  goToMyProfile = () => {
+    localStorage.getItem('userId') && this.props.history.push(`/user/${localStorage.getItem('userId')}`);    
+  }
+
   search = () => {
     this.props.history.push(`/search/${this.state.searchQuery}`);
   }  
@@ -138,8 +142,7 @@ class Header extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleClose}>My account</MenuItem>
+        <MenuItem onClick={this.goToMyProfile}>Profili</MenuItem>
         <MenuItem onClick={logOut}>Çkyçu</MenuItem>
       </Menu>
     );
@@ -159,28 +162,12 @@ class Header extends React.Component {
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge className={classes.margin} badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge className={classes.margin} badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
+      <MenuItem onClick={this.goToMyProfile}>
+        <IconButton color="inherit">
+          <AccountCircle />
+        </IconButton>
+        <p>Profili</p>
+      </MenuItem>
       </Menu>
     );
 
