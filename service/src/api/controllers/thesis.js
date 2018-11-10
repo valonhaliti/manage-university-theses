@@ -1,4 +1,5 @@
 import asyncHandler from '../utils/asyncHandler';
+import { DATA_FETCHED_SUCCESS } from '../constants';
 import { removeFalseyValues  } from '../utils/utilFunctionsForAPIs';
 import '@babel/polyfill';
 import thesis from '../model/thesis';
@@ -56,7 +57,7 @@ export const get = asyncHandler(async (req, res, next) => {
   }
 
   if (response.length > 0)
-    return res.status(200).json({ message: 'Data fetched with success.', data: [ finalResponse ] });
+    return res.status(200).json({ message: DATA_FETCHED_SUCCESS, data: [ finalResponse ] });
   else
     return res.status(404).json({ message: 'Thesis not found' });
 });
@@ -64,7 +65,7 @@ export const get = asyncHandler(async (req, res, next) => {
 export const list = asyncHandler(async (req, res, next) => {
   let response = await thesis.list();
   response = {
-    message: 'Data fetched with success',
+    message: DATA_FETCHED_SUCCESS,
     count: response.length,
     data: response
   };
@@ -105,7 +106,7 @@ export const getByUser = asyncHandler(async (req, res, next) => {
   console.log({userId});
   let response = await thesis.getByUser(userId);
   response = {
-    message: 'Data fetched with success',
+    message: DATA_FETCHED_SUCCESS,
     count: response.length,
     data: response
   };

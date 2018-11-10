@@ -1,12 +1,12 @@
 import asyncHandler from '../utils/asyncHandler';
-import { removeFalseyValues  } from '../utils/utilFunctionsForAPIs';
+import { DATA_FETCHED_SUCCESS } from '../constants';
 import '@babel/polyfill';
 import keyword from '../model/keyword';
 
 export const list = asyncHandler(async (req, res, next) => {
   let response = await keyword.list();
   response = {
-    message: 'Data fetched with success',
+    message: DATA_FETCHED_SUCCESS,
     data: response
   }
   return res.status(200).json(response);

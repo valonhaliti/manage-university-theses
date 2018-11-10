@@ -1,5 +1,6 @@
 import mysql from 'mysql';
 import util from 'util';
+import { TEST_DB_NAME } from '../constants';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -9,7 +10,7 @@ const pool = mysql.createPool({
   port: process.env.DB_PORT,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  database: process.env.NODE_ENV === 'test' ? 'manage_thesis_test' : process.env.DB_NAME
+  database: process.env.NODE_ENV === 'test' ? TEST_DB_NAME : process.env.DB_NAME
 });
 
 /**

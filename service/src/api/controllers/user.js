@@ -1,14 +1,14 @@
 import asyncHandler from '../utils/asyncHandler';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { regexpEmail } from '../constants';
+import { REGEXP_EMAIL, DATA_FETCHED_SUCCESS } from '../constants';
 import { removeFalseyValues } from '../utils/utilFunctionsForAPIs';
 import '@babel/polyfill';
 import user from '../model/user';
 import { verifyToken } from './auth';
 
 export const signUp = asyncHandler(async (req, res, next) => {
-  if (!regexpEmail.test(req.body.email)) {
+  if (!REGEXP_EMAIL.test(req.body.email)) {
     return res.status(409).json({
       message: 'Email address format not valid.'
     });
@@ -88,7 +88,7 @@ export const signIn = asyncHandler(async (req, res, next) => {
 export const get = asyncHandler(async (req, res, next) => {
   const response = await user.get(req.params.userId);
   if (response && response.length > 0)
-    return res.status(200).json({ message: 'Data fetched with success.', data: response });
+    return res.status(200).json({ message: DATA_FETCHED_SUCCESS, data: response });
   else
     return res.status(404).json({ message: 'User not found' });
 });
@@ -104,7 +104,7 @@ export const list = asyncHandler(async (req, res, next) => {
   else
     rows = await user.listAll();
   const response = {
-    message: 'Data fetched with success',
+    message: DATA_FETCHED_SUCCESS,
     count: rows.length,
     data: rows
   };
