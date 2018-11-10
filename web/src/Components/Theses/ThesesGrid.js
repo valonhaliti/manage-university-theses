@@ -8,7 +8,7 @@ export default props => {
     const { params, theses, loader } = props;
     return (
       <>
-        {loader ? <Loader /> : <>{theses.length === 0 ? <Typography>Nuk u gjet asgjë. Sigurohuni që nuk keni bërë gabime gramatikore.</Typography> : null}</>}
+        {loader ? <Loader /> : <>{theses.length === 0 ? <Typography>Nuk u gjet asgjë. Sigurohuni që nuk keni bërë gabime drejtshkrimore.</Typography> : null}</>}
         <Grid container spacing={24} style={{padding: 24}}>
           {theses
             .filter(thesis => params.status !== undefined ? thesis.status === Number(params.status) : true)
