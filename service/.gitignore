@@ -7,6 +7,8 @@ nodemon.json
 .npm
 
 lib
+.compiled
+
 
 ### Visual Studio Code ###
 .vscode/*

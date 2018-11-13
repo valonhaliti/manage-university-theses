@@ -14,8 +14,8 @@ class ThesisList extends Component {
   }
 
   render() {
-    const { match: { params } } = this.props;
-    return <ThesesGrid params={params} theses={this.state.theses} loader={this.state.loader} />
+    const { match: { params, path } } = this.props;
+    return <ThesesGrid params={params} path={path} theses={this.state.theses} loader={this.state.loader} />
   }
 }
 

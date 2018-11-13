@@ -1,18 +1,34 @@
 {
   "0": {
     "label": "Në shqyrtim",
-    "color": "secondary"
+    "color": "primary"
   },
   "1": {
     "label": "Në diskutim",
-    "color": "secondary"
+    "color": "primary"
   },
   "2": {
-    "label": "E aprovuar",
+    "label": "E aprovuar nga mentori",
     "color": "primary"
   },
   "3": {
-    "label": "E mbyllur",
+    "label": "E aprovuar nga departamenti",
     "color": "default"
+  },
+  "4": {
+    "label": "Gati per caktim komisioni",
+    "color": "default"
+  },
+  "5": {
+    "label": "Komisioni u caktuar",
+    "color": "default"
+  },
+  "6": {
+    "label": "Gati per mbrojtje ",
+    "color": "default"
+  },
+  "7": {
+    "label": "E kryer",
+    "color": "secondary"
   }
 }
