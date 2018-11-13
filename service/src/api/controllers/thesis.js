@@ -8,7 +8,7 @@ import thesisToKeyword from '../model/thesisToKeyword';
 
 export const create = asyncHandler(async (req, res, next) => {
   if (req.userData.userType === 1) {
-    return res.json(500).json({
+    return res.json(403).json({
       error: 'Vetëm studentët mund të postojnë temë të diplomës.'
     })
   }
