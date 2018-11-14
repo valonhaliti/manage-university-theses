@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Loader from '../Layout/Loader';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography';
@@ -21,6 +22,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import AlertDialog from '../Style/AlertDialog';
+import TextField from '@material-ui/core/TextField'
 
 const styles = theme => ({
   root: {
@@ -46,6 +48,10 @@ const styles = theme => ({
   anchorDownload: {
     textDecorationLine: 'none',
     textDecoration: 'none',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
   },
   link: {
     color: theme.palette.primary.main,
@@ -79,6 +85,12 @@ class Thesis extends Component {
       keywords: [],
       agreeToDelete: false,
       agreeToDeleteDialogOpen: false,
+      pproved_by_departament_date: '', 
+      delegation_date: '',
+      delegation_list: '',
+      delegation_list_to_update: '',
+      datePicker: '',
+      published_date: ''
     }
     axiosConfig.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   }
@@ -124,12 +136,14 @@ class Thesis extends Component {
       title, description: abstract, category, filepath, 
       created_date, status, professorId, professorFirstName, professorLastName,
       studentId, studentFirstName, studentLastName,
-      keywords
+      keywords, approved_by_departament_date,
+      delegation_date, published_date, delegation_list
     } = data[0];
 
 
     this.setState({
-      title, abstract, category, status, created_date, 
+      title, abstract, category, status, created_date, delegation_list,
+      approved_by_departament_date, delegation_date, published_date, 
       mentorId: professorId,
       mentorName: `${professorFirstName} ${professorLastName}`,
       studentId,
@@ -164,7 +178,11 @@ class Thesis extends Component {
     const { match: { params } } = this.props;
     const { thesisId } = params;
 
-    const updateBody = { statusOfThesis: this.state.statusOfThesis }
+    const updateBody = { 
+      statusOfThesis: this.state.statusOfThesis, 
+      delegation_list: this.state.delegation_list_to_update || null,
+      datePicker: this.state.datePicker || null
+    }
     try {
       await axios.put(`/api/thesis/${thesisId}`, updateBody, axiosConfig);
       this.setState({
@@ -183,12 +201,12 @@ class Thesis extends Component {
       title, abstract, category, created_date, status, keywords,
       mentorId, mentorName,
       studentId, studentName,
-      similarityReport, filepath
+      similarityReport, filepath, delegation_list,
+      approved_by_departament_date, delegation_date, published_date
     } = this.state;
     const userId = localStorage.getItem('userId') && Number(localStorage.getItem('userId'));
     const fileName = filepath && filepath.split('\\')[1];
     const chipData = chipDataConfig[status];
-
     return <>
       {!title ? <Loader /> : null}
       <Grid spacing={24} container>
@@ -263,24 +281,59 @@ class Thesis extends Component {
                   Modifikoje statusin
                 </Button>
                 {this.state.showStatusEditForm ? (
-                  <form>
+                <form>
                   <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="statusOfThesis-simple">Statusi</InputLabel>
-                  <Select
-                    value={this.state.statusOfThesis}
-                    onChange={this.handleChange}
-                    inputProps={{
-                      name: 'statusOfThesis',
-                      id: 'statusOfThesis-simple',
-                    }}
-                  >
-                    {Object.keys(chipDataConfig).map(chip => <MenuItem value={chip}>{chipDataConfig[chip].label}</MenuItem>)}
-                  </Select>
-                  <Button 
-                    onClick={(e) => this.changeStatus(e)}
-                    fullWidth size="small" variant="contained" color="primary" className={classes.button}>
-                    Modifikoje
-                  </Button>
+                    <InputLabel htmlFor="statusOfThesis-simple">Statusi</InputLabel>
+                    <Select
+                      value={this.state.statusOfThesis}
+                      onChange={this.handleChange}
+                      inputProps={{
+                        name: 'statusOfThesis',
+                        id: 'statusOfThesis-simple',
+                      }}
+                    >
+                      {Object.keys(chipDataConfig).map(chip => <MenuItem value={chip}>{chipDataConfig[chip].label}</MenuItem>)}
+                    </Select>
+                    <FormControl className={classes.formControl}>
+                      {this.state.statusOfThesis === 'komisioni-i-caktuar' ?  <TextField
+                        id="outlined-name"
+                        label="Anëtarët e komisionit"
+                        className={classes.textField}
+                        fullWidth
+                        required
+                        value={this.state.delegation_list_to_update}
+                        onChange={this.handleChange}
+                        inputProps={{
+                          name: 'delegation_list_to_update',
+                          id: 'delegation_list_to_update-simple',
+                        }}
+                        margin="normal"
+                        variant="outlined"
+                      /> : null}
+                      {this.state.statusOfThesis === 'komisioni-i-caktuar' || 
+                        this.state.statusOfThesis === 'e-kryer' ||
+                        this.state.statusOfThesis === 'aprovuar-departamenti' ? <TextField
+                        id="date"
+                        label="Data"
+                        type="date"
+                        value={this.state.datePicker}
+                        onChange={this.handleChange}
+                        className={classes.textField}
+                        inputProps={{
+                          name: 'datePicker',
+                          id: 'datePicker-simple',
+                        }}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      /> : null}
+                    </FormControl>
+                    <Button 
+                      onClick={(e) => this.changeStatus(e)}
+                      fullWidth size="small" variant="contained" color="primary" className={classes.button}>
+                      Modifikoje
+                    </Button>
+                    
                   </FormControl>
                 </form>
                 ) : null}
@@ -289,6 +342,9 @@ class Thesis extends Component {
               ): null}
               {userId === studentId ? (
                 <>
+                {approved_by_departament_date ? <Typography>Tema u aprovua nga departamenti më: {moment(approved_by_departament_date).format('LL')}.</Typography> : null}
+                {delegation_date ? <Typography>Komisioni {delegation_list} u caktua më: {moment(delegation_date).format('LL')}.</Typography> : null}
+                {published_date ? <Typography>Tema u mbrojt më: {moment(published_date).format('LL')}</Typography> : null}
                 <Divider />
                 <Button component={Link} to={`/thesis/update/${thesisId}`} variant="outlined" size="small" className={classes.button}>
                   <EditIcon className={classNames(classes.leftIcon, classes.iconSmall)}/>

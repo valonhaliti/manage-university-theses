@@ -7,11 +7,10 @@ import Typography from '@material-ui/core/Typography';
 const filterTheses = (thesis, params, path) => {
   console.log(params, path);
   if (params.status !== undefined) {
-    return thesis.status === Number(params.status);
+    return thesis.status === params.status;
   }
-  else if (path === '/thesisByMentor') {
-    console.log('thesisbymentor');
-    return thesis.professor_id === Number(localStorage.getItem('userId'));
+  else if (path === '/thesisByUser') {
+    return thesis.professor_id === Number(localStorage.getItem('userId')) || thesis.student_id === Number(localStorage.getItem('userId'));
   } 
   return true;
 }

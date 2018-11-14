@@ -73,12 +73,37 @@ export const list = asyncHandler(async (req, res, next) => {
 });
 
 export const update = asyncHandler(async (req, res, next) => {
+  const oldThesis = await thesis.get(req.params.thesisId)
+  const { statusOfThesis, datePicker } = req.body;
+  let approved_by_departament_date, 
+    delegation_date, 
+    published_date;
+  if (statusOfThesis) {
+    if (statusOfThesis === 'aprovuar-departamenti') {
+      approved_by_departament_date = datePicker;
+    } else if (statusOfThesis === 'komisioni-i-caktuar') {
+      delegation_date = datePicker;
+    } else if (statusOfThesis === 'e-kryer') {
+      published_date =  datePicker;
+    }
+  } else if (oldThesis[0].status !== 'shqyrtim' && oldThesis[0].status !== 'diskutim' 
+    && oldThesis[0].status !== 'aprovuar-mentor'
+  ) {
+    return res.status(500).json({
+      message: "You can't modify this thesis anymore."
+    })
+  }
+
   const updateThesis = removeFalseyValues({
+    delegation_date,
+    approved_by_departament_date,
+    published_date,
     title: req.body.title,
     description: req.body.description,
     category: req.body.category,
     filepath: req.file && req.file.path,
-    status: req.body.statusOfThesis
+    status: req.body.statusOfThesis,
+    delegation_list: req.body.delegation_list
   });
 
   if (Object.keys(updateThesis).length > 0) {

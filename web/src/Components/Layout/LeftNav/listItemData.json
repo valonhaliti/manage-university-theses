@@ -8,10 +8,11 @@
   },
   {
     "listItemKey": "thesis-by-mentor",
-    "link": "thesisByMentor",
+    "link": "thesisByUser",
     "icon": "PermIdentity",
     "text": "Temat e mia",
-    "private": true
+    "private": true,
+    "divider": true
   },
   {
     "listItemKey": "latest-thesis",
@@ -21,19 +22,19 @@
   },
   {
     "listItemKey": "pending-thesis",
-    "link": "thesisByStatus/0",
+    "link": "thesisByStatus/shqyrtim",
     "icon": "PendingThesesIcon",
     "text": "Temat në shqyrtim"
   },
   {
     "listItemKey": "approved-thesis",
-    "link": "thesisByStatus/3",
+    "link": "thesisByStatus/aprovuar-departamenti",
     "icon": "ApprovedThesesIcon",
     "text": "Temat e aprovuara"
   },
   {
     "listItemKey": "approved-thesis",
-    "link": "thesisByStatus/7",
+    "link": "thesisByStatus/e-kryer",
     "icon": "DoneAll",
     "text": "Temat e kryera"
   }
