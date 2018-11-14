@@ -87,7 +87,7 @@ export const update = asyncHandler(async (req, res, next) => {
       published_date =  datePicker;
     }
   } else if (oldThesis[0].status !== 'shqyrtim' && oldThesis[0].status !== 'diskutim' 
-    && oldThesis[0].status !== 'aprovuar-mentor'
+    && oldThesis[0].status !== 'aprovuar-mentor' && req.file === undefined
   ) {
     return res.status(500).json({
       message: "You can't modify this thesis anymore."
