@@ -75,8 +75,9 @@ const Thesis = ({
               </Typography>
               )
             }
-            
-            
+            <Typography color={chipData && chipData.color}>
+              {chipData && chipData.label}
+            </Typography>
             <Typography gutterBottom variant="subtitle1" >
               {category} - {moment(createdDate).format('LL')}
             </Typography>
@@ -92,9 +93,6 @@ const Thesis = ({
             justify="space-between"
             alignItems="center"
           >
-            <Grid item>
-              <Chip variant="outlined" label={chipData && chipData.label} color={chipData && chipData.color} />
-            </Grid>
             <Grid item>
               <a className={classes.anchorDownload} href={fileName ? `/api/thesis/download/${fileName}` : false} target="_blank" rel="noopener noreferrer">
                 <Button disabled={fileName == null} variant="outlined" size="small" className={classes.button}>

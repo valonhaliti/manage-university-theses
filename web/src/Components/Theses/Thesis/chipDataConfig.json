@@ -1,18 +1,34 @@
 {
-  "0": {
+  "shqyrtim": {
     "label": "Në shqyrtim",
-    "color": "secondary"
-  },
-  "1": {
-    "label": "Në diskutim",
-    "color": "secondary"
-  },
-  "2": {
-    "label": "E aprovuar",
     "color": "primary"
   },
-  "3": {
-    "label": "E mbyllur",
+  "diskutim": {
+    "label": "Në diskutim",
+    "color": "primary"
+  },
+  "aprovuar-mentori": {
+    "label": "E aprovuar nga mentori",
+    "color": "primary"
+  },
+  "aprovuar-departamenti": {
+    "label": "E aprovuar nga departamenti",
     "color": "default"
+  },
+  "gati-per-komision": {
+    "label": "Gati per caktim komisioni",
+    "color": "default"
+  },
+  "komisioni-i-caktuar": {
+    "label": "Komisioni u caktua",
+    "color": "default"
+  },
+  "gati-per-mbrojtje": {
+    "label": "Gati per mbrojtje ",
+    "color": "default"
+  },
+  "e-kryer": {
+    "label": "E kryer",
+    "color": "secondary"
   }
 }

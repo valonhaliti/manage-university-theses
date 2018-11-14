@@ -49,15 +49,18 @@ class LeftNav extends Component {
           <div className={classes.toolbar} />
           <List>
             {listItems.map(listItem => {
-              if (listItem.divider) return <Divider key={++dividerKey} />
-              return <ListItemComponent 
+              let listItemComp = <ListItemComponent 
                 key={listItem.listItemKey}
                 link={listItem.link}
                 text={listItem.text}
                 icon={listItem.icon}
                 isSelected={`/${listItem.link}` === pathname}
               />
-            })}
+              return <>
+              {listItem.private ? (localStorage.getItem('token') ? listItemComp : null) : listItemComp}
+              
+              {listItem.divider ? <Divider key={++dividerKey} /> : null}
+            </>})}
           </List>
         </Drawer>
     );

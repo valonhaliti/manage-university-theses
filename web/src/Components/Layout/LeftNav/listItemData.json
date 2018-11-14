@@ -3,9 +3,15 @@
     "listItemKey": "add-new-thesis",
     "link": "create",
     "icon": "AddIcon",
-    "text": "Ngarko temën"
+    "text": "Ngarko temën",
+    "divider": true
   },
   {
+    "listItemKey": "thesis-by-mentor",
+    "link": "thesisByUser",
+    "icon": "PermIdentity",
+    "text": "Temat e mia",
+    "private": true,
     "divider": true
   },
   {
@@ -16,14 +22,20 @@
   },
   {
     "listItemKey": "pending-thesis",
-    "link": "thesisByStatus/0",
+    "link": "thesisByStatus/shqyrtim",
     "icon": "PendingThesesIcon",
     "text": "Temat në shqyrtim"
   },
   {
     "listItemKey": "approved-thesis",
-    "link": "thesisByStatus/2",
+    "link": "thesisByStatus/aprovuar-departamenti",
     "icon": "ApprovedThesesIcon",
     "text": "Temat e aprovuara"
+  },
+  {
+    "listItemKey": "approved-thesis",
+    "link": "thesisByStatus/e-kryer",
+    "icon": "DoneAll",
+    "text": "Temat e kryera"
   }
 ]

@@ -21,19 +21,20 @@ CREATE TABLE IF NOT EXISTS `thesis` (
   `description` TEXT NULL,
   `category` VARCHAR(64) NULL,
   `filepath` VARCHAR(500) NULL,
+  `delegation_list` VARCHAR(200) NULL,
   `created_date` TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `approved_by_departament_date` TIMESTAMP(6) NULL,
+  `delegation_date` TIMESTAMP(6) NULL,
   `published_date`TIMESTAMP(6) NULL,
   `is_deleted` TINYINT NOT NULL DEFAULT 0,
   `added_by` INT NULL,
-  -- status:
-  --  0 - pending
-  --  1 - to be discussed
-  --  2 - approved
-  --  3 - closed
-  `status` TINYINT NULL DEFAULT 0,
+  `status` ENUM(
+    'shqyrtim', 'diskutim', 'aprovuar-mentori', 'aprovuar-departamenti', 'gati-per-komision',
+    'komisioni-i-caktuar', 'gati-per-mbrojtje', 'e-kryer'
+  )  NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx_thesis__category` (`category`),
-  CONSTRAINT `fk_Thesis__added_by` FOREIGN KEY (`added_by`) REFERENCES `USER` (`id`)
+  CONSTRAINT `fk_Thesis__added_by` FOREIGN KEY (`added_by`) REFERENCES `user` (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS similarity_report (

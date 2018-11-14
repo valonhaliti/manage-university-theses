@@ -5,6 +5,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/AddCircle';
 import PendingThesesIcon from '@material-ui/icons/ThumbsUpDown';
 import ApprovedThesesIcon from '@material-ui/icons/DoneOutline';
+import PermIdentity from '@material-ui/icons/PermIdentity';
+import DoneAll from '@material-ui/icons/DoneAll';
 import InfoIcon from '@material-ui/icons/Info'
 import { Link } from 'react-router-dom';
 
@@ -18,11 +20,14 @@ const getIcon = nameOfIcon => {
       return <PendingThesesIcon />;
     case 'ApprovedThesesIcon':
       return <ApprovedThesesIcon />;
+    case 'PermIdentity':
+      return <PermIdentity />;
+    case 'DoneAll':
+      return <DoneAll />;
     default:
       return null;
   }
 }
-
 
 export default props => {
   const { link, listItemKey, isSelected, text, icon } = props;

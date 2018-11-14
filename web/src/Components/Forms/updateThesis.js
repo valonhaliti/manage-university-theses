@@ -210,11 +210,19 @@ class Form extends React.Component {
       });
 
     } catch (err) {
-      this.setState({ 
-        snackBarOpen: true,
-        snackBarVariant: 'error',
-        snackBarMessage: 'Pati një gabim gjatë ngarkimit të temës, provoni përsëri.'
-      });
+      if (err.response.data.message === "You can't modify this thesis anymore.") {
+        this.setState({ 
+          snackBarOpen: true,
+          snackBarVariant: 'error',
+          snackBarMessage: 'Tema është aprovuar dhe ju nuk mund ta modifikoni më.'
+        });
+      } else {
+        this.setState({ 
+          snackBarOpen: true,
+          snackBarVariant: 'error',
+          snackBarMessage: 'Pati një gabim gjatë ngarkimit të temës, provoni përsëri.'
+        });
+      }
     }
   }
 
