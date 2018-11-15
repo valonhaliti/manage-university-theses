@@ -89,6 +89,7 @@ export const update = asyncHandler(async (req, res, next) => {
   } else if (oldThesis[0].status !== 'shqyrtim' && oldThesis[0].status !== 'diskutim' 
     && oldThesis[0].status !== 'aprovuar-mentor' && req.file === undefined
   ) {
+    // FIXME: We should modify only req.file !!!! not abstract and title (if status is approved)
     return res.status(500).json({
       message: "You can't modify this thesis anymore."
     })

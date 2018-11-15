@@ -23,6 +23,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import AlertDialog from '../Style/AlertDialog';
 import TextField from '@material-ui/core/TextField'
+import SinglePage from "../Reports/SinglePage";
+import PrintButton from "../Reports/PrintButton";
+
+
 
 const styles = theme => ({
   root: {
@@ -208,6 +212,8 @@ class Thesis extends Component {
     const fileName = filepath && filepath.split('\\')[1];
     const chipData = chipDataConfig[status];
     return <>
+      <PrintButton id={"singlePage"} label={"Print single page"} />
+      <SinglePage id={"singlePage"} style={{visibility: 'hidden'}}/>
       {!title ? <Loader /> : null}
       <Grid spacing={24} container>
         <Grid item xs={12} sm={8}>
