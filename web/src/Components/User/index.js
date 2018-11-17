@@ -21,7 +21,11 @@ import FormControl from '@material-ui/core/FormControl';
 import Icon from '@material-ui/core/Icon';
 import AlertDialog from '../Style/AlertDialog';
 import ThesisByUser from './ThesisByUser';
-import TextField from '@material-ui/core/TextField'
+import TextField from '@material-ui/core/TextField';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 const styles = theme => ({
   root: {
@@ -89,6 +93,8 @@ class User extends Component {
       displayName: '',
       registrationYear: '',
       showEditForm: false,
+      department: '',
+      program: '',
       theses: []
     }
     axiosConfig.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
@@ -134,7 +140,8 @@ class User extends Component {
     const { userId } = params;
     const userData = await this.getUserData(userId)
     const { 
-      firstname, lastname, email, type, registration_year
+      firstname, lastname, email, type, registration_year,
+      department, program
     } = userData[0];
     const thesesByUser = await axios.get(`/api/thesis/byUser/${userId}`);
 
@@ -143,6 +150,8 @@ class User extends Component {
       type,
       firstname,
       lastname,
+      department, 
+      program,
       displayName: `${firstname} ${lastname}`,
       registrationYear: registration_year,
       theses: thesesByUser.data.data
@@ -191,7 +200,6 @@ class User extends Component {
 
   getUserData = async (userId) => {
     const userData = await axios.get(`/api/user/${userId}`);
-    console.log(userData);
     return userData.data.data;
   }
 
@@ -202,30 +210,42 @@ class User extends Component {
     const currentUserId = localStorage.getItem('userId') && Number(localStorage.getItem('userId'));
     const {
       displayName, type, registrationYear, email, theses,
-       showEditForm
+      department, program, showEditForm
     } = this.state;
     return <>
       {!displayName ? <Loader /> : null}
       <Grid spacing={24} container>
-        <Grid item xs={12} sm={8}>
-          <Paper className={classes.paper}>
-            <Typography variant="h3">
-              {displayName}
-            </Typography>
-            {type === 0 ? <> 
-              <Typography variant="overline" gutterBottom> 
-                Student 
-              </Typography>
-              <Typography variant="h5">
-                Viti i regjistrimit
-              </Typography>  
-              <Typography variant="h6">
-                {registrationYear}
-              </Typography>
-            </> : <Typography variant="overline" gutterBottom> 
-                Profesor 
-              </Typography>}
+        <Grid item xs={12} sm={6}>
+          <Paper className={classes.root}>
+            <Typography variant='h5'>{displayName}</Typography>
+            <Table className={classes.table}>
+              <TableBody>
+                <TableRow key="name">
+                  <TableCell component="th" scope="row">Emri dhe mbiemri</TableCell>
+                  <TableCell>{displayName}</TableCell>
+                </TableRow>  
+                <TableRow key="name">
+                  <TableCell component="th" scope="row">Roli</TableCell>
+                  <TableCell>{type === 0 ? 'Student' : 'Mentor / Profesor'}</TableCell>
+                </TableRow>
 
+                {type === 0 ? <>
+                  <TableRow key="name">
+                    <TableCell component="th" scope="row">Viti i regjitrimit</TableCell>
+                    <TableCell>{registrationYear}</TableCell>
+                  </TableRow>
+                  <TableRow key="name">
+                    <TableCell component="th" scope="row">Departmenti</TableCell>
+                    <TableCell>{department}</TableCell>
+                  </TableRow>
+                  <TableRow key="name">
+                    <TableCell component="th" scope="row">Programi</TableCell>
+                    <TableCell>{program}</TableCell>
+                  </TableRow>
+                </> : null}
+
+              </TableBody>
+            </Table>
             {currentUserId === userId ? <>
               <Divider style={{ marginBottom: '10px' }} />
               <Button onClick={this.showEditForm} variant="outlined" size="small" className={classes.button}>

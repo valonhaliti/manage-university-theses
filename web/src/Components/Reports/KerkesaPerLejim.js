@@ -2,17 +2,17 @@ import React from 'react';
 import Page from './Page';
 import moment from 'moment';
 
-const SinglePage = ({
+const KerkesaPerLejim = ({
   id, 
   studentName="Valon Haliti", 
   departmentName='Matematikës', 
   programiStudimor='Shkenca kompjuterike',
   thesisTitle="Clustering of words",
-  mentorName="Eliot Bytyci"
+  mentorName="Mentor Mentori"
   }) => (<Page singleMode={true} id={id}>
   <div style={{display: 'flex'}}>
     <div style={{width: '100px'}}>
-      <img src="../University_of_Prishtina_logo.svg" alt="Logo e Universiteti te Prishtines" />
+      <img src="/University_of_Prishtina_logo.svg" alt="Logo e Universiteti te Prishtines" />
     </div>
     <div style={{textAlign: 'center', paddingLeft: '40px'}}>
       <h3 style={{marginBottom: -15}}>UNIVERSITETI I PRISHTINËS</h3>
@@ -67,4 +67,4 @@ const SinglePage = ({
 
 </Page>);
 
-export default SinglePage;
+export default KerkesaPerLejim;

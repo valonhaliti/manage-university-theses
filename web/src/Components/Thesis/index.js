@@ -13,6 +13,7 @@ import chipDataConfig from '../Theses/Thesis/chipDataConfig';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import FileCopy from '@material-ui/icons/FileCopy';
+import LocalPrintshop from '@material-ui/icons/LocalPrintshop';
 import SimilarityThesis from './SimilarityThesis';
 import EditIcon from '@material-ui/icons/Edit';
 import Delete from '@material-ui/icons/Delete';
@@ -23,8 +24,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import AlertDialog from '../Style/AlertDialog';
 import TextField from '@material-ui/core/TextField'
-import SinglePage from "../Reports/SinglePage";
 import PrintButton from "../Reports/PrintButton";
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 
 
@@ -212,8 +217,6 @@ class Thesis extends Component {
     const fileName = filepath && filepath.split('\\')[1];
     const chipData = chipDataConfig[status];
     return <>
-      <PrintButton id={"singlePage"} label={"Print single page"} />
-      <SinglePage id={"singlePage"} style={{visibility: 'hidden'}}/>
       {!title ? <Loader /> : null}
       <Grid spacing={24} container>
         <Grid item xs={12} sm={8}>
@@ -348,9 +351,77 @@ class Thesis extends Component {
               ): null}
               {userId === studentId ? (
                 <>
-                {approved_by_departament_date ? <Typography>Tema u aprovua nga departamenti më: {moment(approved_by_departament_date).format('LL')}.</Typography> : null}
-                {delegation_date ? <Typography>Komisioni {delegation_list} u caktua më: {moment(delegation_date).format('LL')}.</Typography> : null}
-                {published_date ? <Typography>Tema u mbrojt më: {moment(published_date).format('LL')}</Typography> : null}
+                <Divider style={{ marginBottom: '20px' }} />
+                <Typography variant="h6">Statusi i temës</Typography>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>
+                        Statusi
+                      </TableCell>
+                      <TableCell>
+                        Aksioni
+                      </TableCell>
+                      <TableCell>
+                        Data
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    
+                  {status !== 'shqyrtim' && status !== 'diskutim' ? <TableRow>
+                      <TableCell>
+                        Tema u aprovua nga mentori
+                      </TableCell>
+                      <TableCell>
+                        <Button style={{marginTop: '-5px'}} variant="outlined" size="small" className={classes.button} component={Link} to={`/kerkesaPerLejimTeTemes/${title}/${mentorName}/${studentId}`}>
+                          <LocalPrintshop className={classNames(classes.leftIcon, classes.iconSmall)}/>
+                          Kërkesa
+                        </Button> 
+                      </TableCell>
+                      <TableCell>
+                        -
+                      </TableCell>
+                    </TableRow> : null}
+                    {approved_by_departament_date ? <TableRow>
+                      <TableCell>
+                      Tema u aprovua nga departamenti
+                      </TableCell>
+                      <TableCell>
+                        -
+                      </TableCell>
+                      <TableCell>
+                      {moment(approved_by_departament_date).format('LL')}
+                      </TableCell>
+                    </TableRow> : null}
+                    {delegation_date ? <TableRow>
+                      <TableCell>
+                      Komisioni {delegation_list} u caktua
+                      </TableCell>
+                      <TableCell>
+                        -
+                      </TableCell>
+                      <TableCell>
+                      {moment(delegation_date).format('LL')}
+                      </TableCell>
+                    </TableRow> : null} 
+                    {published_date ? <TableRow>
+                      <TableCell>
+                      Tema u mbrojt
+                      </TableCell>
+                      <TableCell>
+                        -
+                      </TableCell>
+                      <TableCell>
+                      {moment(published_date).format('LL')}
+                      </TableCell>
+                    </TableRow> : null}
+                    
+                    
+
+                  </TableBody>
+                </Table>
+               
                 <Divider />
                 <Button component={Link} to={`/thesis/update/${thesisId}`} variant="outlined" size="small" className={classes.button}>
                   <EditIcon className={classNames(classes.leftIcon, classes.iconSmall)}/>
