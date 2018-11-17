@@ -11,6 +11,7 @@ import UpdateThesis from './Forms/updateThesis';
 import Register from './Auth/Register';
 import ThesesSearchPage from './Theses/ThesesSearchPage';
 import User from './User';
+import Report from './Reports';
 
 class App extends Component {  
 
@@ -22,6 +23,7 @@ class App extends Component {
               <Route exact path="/"  render={() => <Redirect to="thesis" />}/>
               <Route exact path="/thesis" component={Theses}/>
               <Route exact path="/thesisByStatus/:status" render={props => <Theses {...props}/>}/>
+              <Route exact path="/kerkesaPerLejimTeTemes/:thesisTitle/:mentorName/:userId" render={props => <Report {...props}/>}/>
               <Route exact path="/thesisByUser" render={props => <Theses {...props}/>}/>
               <Route exact path="/thesis/:thesisId" render={props => <Thesis {...props}/>}/>
               <Route exact path="/user/:userId" render={props => <User {...props}/>}/>

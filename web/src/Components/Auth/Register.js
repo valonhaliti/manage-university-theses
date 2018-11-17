@@ -49,6 +49,7 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  
 });
 
 class Register extends React.Component {
@@ -61,6 +62,8 @@ class Register extends React.Component {
       userType: '',
       registrationYear: '',
       password:'',
+      department: '',
+      program: '',
       redirectToHome: false 
     }
   }
@@ -73,11 +76,14 @@ class Register extends React.Component {
 
   onSubmit = async (e, login) => {
     e.preventDefault();
-    const { email, firstName, lastName, userType, registrationYear, password } = this.state;
+    const { email, firstName, lastName, userType, 
+      registrationYear, password, department, program } = this.state;
     try {
       await axios.post('/api/user/signup', {
         email,
         password,
+        department,
+        program,
         firstname: firstName,
         lastname: lastName,
         type: userType,
@@ -92,7 +98,7 @@ class Register extends React.Component {
   }
 
   render() {
-    let { redirectToHome } = this.state;
+    let { redirectToHome, userType } = this.state;
     const { classes } = this.props;
 
     if (redirectToHome) return <Redirect to='/login' />;
@@ -111,29 +117,27 @@ class Register extends React.Component {
                     Regjistrohu
                   </Typography>
                   <form className={classes.form}>
-                  <FormControl margin="normal" required fullWidth>
+                    <FormControl margin="normal" required  fullWidth>
                       <InputLabel htmlFor="email">Email Adresa</InputLabel>
                       <Input 
                         id="email" 
                         name="email" 
-                        autoComplete="email"    
                         value={this.state.email}
                         onChange={this.handleChange('email')} 
-                        autoFocus />
+                      />
                     </FormControl>
                     <FormControl margin="normal" required fullWidth>
-                      <InputLabel htmlFor="email">Fjalëkalimi</InputLabel>
+                      <InputLabel htmlFor="password">Fjalëkalimi</InputLabel>
                       <Input 
                         id="password" 
                         name="password" 
                         type="password"
-                        autoComplete="password"    
                         value={this.state.password}
                         onChange={this.handleChange('password')} 
-                         />
+                      />
                     </FormControl>
                     <FormControl margin="normal" required fullWidth>
-                      <InputLabel htmlFor="email">Emri</InputLabel>
+                      <InputLabel htmlFor="firstName">Emri</InputLabel>
                       <Input 
                         id="firstName" 
                         name="firstName" 
@@ -142,7 +146,7 @@ class Register extends React.Component {
                          />
                     </FormControl>
                     <FormControl margin="normal" required fullWidth>
-                      <InputLabel htmlFor="email">Mbiemri</InputLabel>
+                      <InputLabel htmlFor="lastName">Mbiemri</InputLabel>
                       <Input 
                         id="lastName" 
                         name="lastName"     
@@ -150,16 +154,7 @@ class Register extends React.Component {
                         onChange={this.handleChange('lastName')} 
                          />
                     </FormControl>
-                    <FormControl margin="normal"  fullWidth>
-                      <InputLabel htmlFor="email">Viti i regjistrimit</InputLabel>
-                      <Input 
-                        id="registrationYear"
-                        name="registrationYear"
-                        type="number"     
-                        value={this.state.registrationYear}
-                        onChange={this.handleChange('registrationYear')} 
-                        />
-                    </FormControl>
+                    
                     <FormControl margin="normal" component="fieldset" className={classes.formControl}>
                       <FormLabel component="legend">Ju jeni</FormLabel>
                       <RadioGroup
@@ -173,6 +168,39 @@ class Register extends React.Component {
                         <FormControlLabel value="1" control={<Radio />} label="Profesor / mentor" />
                       </RadioGroup>
                     </FormControl>
+                    
+                    {userType === "0" ? <>
+                      <FormControl margin="normal" fullWidth>
+                        <InputLabel htmlFor="registrationYear">Viti i regjistrimit</InputLabel>
+                        <Input 
+                          id="registrationYear"
+                          name="registrationYear"
+                          type="number"     
+                          value={this.state.registrationYear}
+                          onChange={this.handleChange('registrationYear')} 
+                        />
+                      </FormControl>
+                      <FormControl margin="normal" fullWidth>
+                        <InputLabel htmlFor="department">Departamenti</InputLabel>
+                        <Input 
+                          id="department" 
+                          name="department"   
+                          value={this.state.department}
+                          onChange={this.handleChange('department')} 
+                        />
+                      </FormControl>
+                      <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="program">Programi</InputLabel>
+                        <Input 
+                          id="program" 
+                          name="program"  
+                          value={this.state.program}
+                          onChange={this.handleChange('program')} 
+                        />
+                      </FormControl>
+                    </> : null}
+                    
+
                     <Button
                       type="submit"
                       fullWidth

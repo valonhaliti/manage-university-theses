@@ -20,6 +20,8 @@ export const signUp = asyncHandler(async (req, res, next) => {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     type: req.body.type,
+    department: req.body.department,
+    program: req.body.program,
     registration_year: req.body.registration_year
   });
   if (userObj && isNaN(parseInt(userObj.registration_year))) {
@@ -64,21 +66,21 @@ export const signIn = asyncHandler(async (req, res, next) => {
 
   const match = await bcrypt.compare(req.body.password, userResponse[0].password);
   if (match) {
-      const token = jwt.sign(
-        {
-          email: userResponse[0].email,
-          userId: userResponse[0].id,
-          userType: userResponse[0].type
-        },
-        process.env.JWT_KEY,
-        {
-          expiresIn: "24h"
-        }
-      );
-      return res.status(200).json({
-        message: 'You logged in',
-        token
-      })
+    const token = jwt.sign(
+      {
+        email: userResponse[0].email,
+        userId: userResponse[0].id,
+        userType: userResponse[0].type
+      },
+      process.env.JWT_KEY,
+      {
+        expiresIn: "24h"
+      }
+    );
+    return res.status(200).json({
+      message: 'You logged in',
+      token
+    })
   };
   return res.status(401).json({
     message: 'Auth failed'
