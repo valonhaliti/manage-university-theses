@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import KerkesaPerLejim from './KerkesaPerLejim';
-import PrintButton from './PrintButton';
+import Button from '@material-ui/core/Button';
 
 class Report extends Component {
   state = {
@@ -37,8 +37,13 @@ class Report extends Component {
     return <> 
       {path.startsWith('/kerkesaPerLejimTeTemes') ? 
       <>
-        <PrintButton id={"printable"} label={"Printoje kërkesën për lejimin e temës së diplomës"} />
-        <KerkesaPerLejim id={"printable"} {...this.state}  /> 
+        <div style={{textAlign: 'center'}}>
+          <a style={{textDecoration: 'none'}} href="javascript:window.print()">
+            <Button  variant="outlined">Printoje</Button>
+          </a>
+        </div>
+    
+        <KerkesaPerLejim id={"section-to-print"} {...this.state}  /> 
       </>: 
       null }
     </>; 

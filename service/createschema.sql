@@ -25,9 +25,9 @@ CREATE TABLE IF NOT EXISTS `thesis` (
   `filepath` VARCHAR(500) NULL,
   `delegation_list` VARCHAR(200) NULL,
   `created_date` TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-  `approved_by_departament_date` TIMESTAMP(6) NULL,
-  `delegation_date` TIMESTAMP(6) NULL,
-  `published_date`TIMESTAMP(6) NULL,
+  `approved_by_departament_date` DATE NULL,
+  `delegation_date` DATE NULL,
+  `published_date`DATE NULL,
   `is_deleted` TINYINT NOT NULL DEFAULT 0,
   `added_by` INT NULL,
   `status` ENUM(
