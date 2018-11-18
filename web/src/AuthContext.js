@@ -19,7 +19,9 @@ class AuthProvider extends Component {
       } catch (err) {
         this.setState({
           isAuth: false
-        });
+        });    
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
       } 
     }
   }

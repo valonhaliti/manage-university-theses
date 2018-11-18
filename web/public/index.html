@@ -8,7 +8,39 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+    <link ref="stylesheet" href="style.css" />   
+    <style type="text/css" media="print">
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        body {
+          margin: 0;
+          padding: 0;
+          height: 290mm;
+        }
+        #section-to-print, #section-to-print * {
+          visibility: visible;
+        }
+        #section-to-print {
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+        #root, .Layout-root-1, body, html {
+          height: 297mm !important;
+          width: 210mm !important;
+          margin: 0;
+          padding: 0;
+        }
+      }
+      @page {
+        size: A4;
+        /* margin: 10%;margin: 0mm;  */
+        margin: 0mm; 
+      }
 
+    </style> 
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/

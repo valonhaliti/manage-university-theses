@@ -31,6 +31,26 @@ export default class {
     return rows;
   }
 
+  static async listThesisByStatus(status, from, to) {
+    let query = 'SELECT id, title, description, category, filepath, status, created_date as createdDate, professor_id, student_id ';
+    query += 'FROM thesis LEFT JOIN thesis_to_user ON thesis.id = thesis_to_user.thesis_id ';
+    query += 'WHERE thesis.is_deleted = 0 ';
+    
+    let columnStatus = '';
+    if (status === 'aprovuar-departamenti') 
+      columnStatus = 'approved_by_departament_date';
+    else if (status === 'komisioni-i-caktuar')
+      columnStatus = 'delegation_date';
+    else if (status === 'e-kryer')
+      columnStatus = 'published_date';
+    
+    query += `AND (${columnStatus} >= ? AND ${columnStatus} <= ?) `
+    query += 'ORDER BY createdDate DESC;'
+
+    const rows = await db.query(query, [from, to]);
+    return rows;
+  }
+
   static async getByUser(userId) {
     let query = 'SELECT id, title, description, category, filepath, status, created_date as createdDate, professor_id, student_id ';
     query += 'FROM thesis LEFT JOIN thesis_to_user ON thesis.id = thesis_to_user.thesis_id ';

@@ -72,6 +72,15 @@ export const list = asyncHandler(async (req, res, next) => {
   return res.status(200).json(response);
 });
 
+export const listThesisByStatus = asyncHandler(async (req, res, next) => {
+  const { status, from, to } = req.params;
+  const response = await thesis.listThesisByStatus(status, from, to);
+  return res.status(200).json({
+    message: DATA_FETCHED_SUCCESS,
+    data: response    
+   })
+});
+
 export const update = asyncHandler(async (req, res, next) => {
   const oldThesis = await thesis.get(req.params.thesisId)
   const { statusOfThesis, datePicker } = req.body;
@@ -129,7 +138,6 @@ export const remove = asyncHandler(async (req, res, next) => {
 
 export const getByUser = asyncHandler(async (req, res, next) => {
   const { userId } = req.params;
-  console.log({userId});
   let response = await thesis.getByUser(userId);
   response = {
     message: DATA_FETCHED_SUCCESS,
