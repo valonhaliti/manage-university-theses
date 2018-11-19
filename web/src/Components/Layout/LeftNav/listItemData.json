@@ -33,9 +33,16 @@
     "text": "Temat e aprovuara"
   },
   {
-    "listItemKey": "approved-thesis",
+    "listItemKey": "done-thesis",
     "link": "thesisByStatus/e-kryer",
     "icon": "DoneAll",
-    "text": "Temat e kryera"
+    "text": "Temat e kryera",
+    "divider": true
+  },
+  {
+    "listItemKey": "generate-reports",
+    "link": "generateReports",
+    "icon": "GenerateReport",
+    "text": "Gjenero raporte"
   }
 ]

@@ -19,7 +19,7 @@ export default props => {
     const { params, theses, loader, path } = props;
     return (
       <>
-        {loader ? <Loader /> : <>{theses.length === 0 ? <Typography>Nuk u gjet asgjë. Sigurohuni që nuk keni bërë gabime drejtshkrimore.</Typography> : null}</>}
+        {loader ? <Loader /> : <>{theses.length === 0 ? <Typography>Nuk u gjet asgjë. Sigurohuni që nuk keni bërë gabime gjatë kërkimit.</Typography> : null}</>}
         <Grid container spacing={24} style={{padding: 24}}>
           {theses
             .filter(thesis => filterTheses(thesis, params, path))

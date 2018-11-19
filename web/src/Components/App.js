@@ -10,6 +10,7 @@ import Form from './Forms/uploadThesis';
 import UpdateThesis from './Forms/updateThesis';
 import Register from './Auth/Register';
 import ThesesSearchPage from './Theses/ThesesSearchPage';
+import GenerateReports from './GenerateReports';
 import User from './User';
 import Report from './Reports';
 
@@ -24,10 +25,11 @@ class App extends Component {
               <Route exact path="/thesis" component={Theses}/>
               <Route exact path="/thesisByStatus/:status" render={props => <Theses {...props}/>}/>
               <Route exact path="/kerkesaPerLejimTeTemes/:thesisTitle/:mentorName/:userId" render={props => <Report {...props}/>}/>
-              <Route exact path="/thesisByUser" render={props => <Theses {...props}/>}/>
+              <PrivateRoute exact path="/thesisByUser" render={props => <Theses {...props}/>}/>
               <Route exact path="/thesis/:thesisId" render={props => <Thesis {...props}/>}/>
               <Route exact path="/user/:userId" render={props => <User {...props}/>}/>
               <Route exact path="/thesis/update/:thesisId" render={props => <UpdateThesis {...props}/>}/>
+              <Route exact path="/generateReports" component={GenerateReports} />
               <PrivateRoute exact path ="/create" component={Form} />
               <Route exact path ="/login" component={LogIn} />
               <Route exact path ="/search/:searchQuery" component={ThesesSearchPage} />
