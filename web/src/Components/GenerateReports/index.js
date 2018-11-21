@@ -148,14 +148,14 @@ class GenerateReports extends Component {
             <MenuItem value='e-kryer'>E kryer (mbrojtur)</MenuItem>
           </Select>
         </FormControl> 
-        <FormControl required variant="outlined" className={classes.formControl}>
+        <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel
             ref={ref => {
               this.InputLabelRef = ref;
             }}
             htmlFor="outlined-currentMentor-simple"
           >
-            Mentori
+            Filtro sipas mentorit
           </InputLabel>
           <Select
             value={this.state.currentMentor}
