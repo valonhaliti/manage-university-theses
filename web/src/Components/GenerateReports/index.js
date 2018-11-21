@@ -27,6 +27,11 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
+  flexDiv: {
+    marginTop: 10,
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
   formControl: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -89,6 +94,7 @@ class GenerateReports extends Component {
   render() {
     const { match: { params, path }, classes } = this.props;
     return <>
+      <Paper style={{ padding: '50px 0' }}>
       <form className={classes.root}>
         <TextField
           id="date"
@@ -147,7 +153,12 @@ class GenerateReports extends Component {
             <MenuItem value='komisioni-i-caktuar'>Komisioni i caktuar</MenuItem>
             <MenuItem value='e-kryer'>E kryer (mbrojtur)</MenuItem>
           </Select>
-        </FormControl> 
+        </FormControl>  
+        <Button variant="contained" color="primary" className={classes.button} onClick={this.handleClick}>
+          Gjenero
+        </Button>
+      </form>
+      <div className={classes.flexDiv}>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel
             ref={ref => {
@@ -172,21 +183,21 @@ class GenerateReports extends Component {
                 <MenuItem value={id}>{displayName}</MenuItem>
               ))}
           </Select>
-        </FormControl> 
-        <Button variant="contained" color="primary" className={classes.button} onClick={this.handleClick}>
-          Gjenero
-        </Button>
-      </form>
-      {/* <ThesesGrid params={params} path={path} theses={this.state.theses} loader={this.state.loader} /> */}
-      
-      {this.state.theses.length > 0 ? 
-      <>
+        </FormControl>
+        {this.state.theses.length > 0 ? 
         <ReactToPrint
           trigger={() => <a href="#">
           <Button  variant="outlined">Printoje</Button>          
           </a>}
           content={() => this.componentRef}
         /> 
+        : null}
+      </div>
+      </Paper>
+      {/* <ThesesGrid params={params} path={path} theses={this.state.theses} loader={this.state.loader} /> */}
+      
+      {this.state.theses.length > 0 ? 
+      <>
         <Paper
         ref={el => (this.componentRef = el)}
         id="section-to-print" className={classes.root}>

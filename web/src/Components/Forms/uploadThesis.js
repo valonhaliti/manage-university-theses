@@ -189,7 +189,9 @@ class Form extends React.Component {
         snackBarVariant: 'success',
         snackBarMessage: 'Tema u ngarkua me sukses.'
       });
-
+      setTimeout(() => {
+        this.props.history.push(`/thesis/${response.data.data.id}`);        
+      }, 1000);
     } catch (err) {
       this.setState({ 
         snackBarOpen: true,
