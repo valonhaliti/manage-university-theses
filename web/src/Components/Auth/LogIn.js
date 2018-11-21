@@ -52,7 +52,8 @@ class LogIn extends React.Component {
     super();
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      errored: false
     }
   }
 
@@ -75,6 +76,9 @@ class LogIn extends React.Component {
       localStorage.setItem('userId', jwtDecode(response.data.token).userId);
       login();      
     } catch (err) {
+      this.setState({
+        errored: true
+      })
       console.log('err submit form', err);
     }     
   }
@@ -130,11 +134,19 @@ class LogIn extends React.Component {
                     <Typography 
                       component={Link} to="register" 
                       style={{ marginTop: '20px', textDecoration: 'none' }} 
-                      color="secondary"
+                      color="primary"
                     >
                       Nuk ke user? Regjistrohu
                     </Typography>
-                   
+                    {this.state.errored ? 
+                       <Typography 
+                        component={Link} to="register" 
+                        style={{ marginTop: '20px', textDecoration: 'none' }} 
+                        color="secondary"
+                      >
+                        Email adresa apo fjalekalimi qe keni shenuar nuk eshte valid.  
+                      </Typography>
+                      : null}
                   </form>
                 </Paper>
               ) }

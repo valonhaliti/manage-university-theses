@@ -208,7 +208,9 @@ class Form extends React.Component {
         snackBarVariant: 'success',
         snackBarMessage: 'Tema u përditësua me sukses.'
       });
-
+      setTimeout(() => {
+        this.props.history.push(`/thesis/${thesisId}`);        
+      }, 1000);
     } catch (err) {
       if (err.response.data.message === "You can't modify this thesis anymore.") {
         this.setState({ 
