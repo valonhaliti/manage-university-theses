@@ -25,7 +25,7 @@ class App extends Component {
               <Route exact path="/thesis" component={Theses}/>
               <Route exact path="/thesisByStatus/:status" render={props => <Theses {...props}/>}/>
               <Route exact path="/kerkesaPerLejimTeTemes/:thesisTitle/:mentorName/:userId" render={props => <Report {...props}/>}/>
-              <PrivateRoute exact path="/thesisByUser" component={Theses} props />/>
+              <PrivateRoute exact path="/thesisByUser" component={Theses} props />
               <Route exact path="/thesis/:thesisId" render={props => <Thesis {...props}/>}/>
               <Route exact path="/user/:userId" render={props => <User {...props}/>}/>
               <Route exact path="/thesis/update/:thesisId" render={props => <UpdateThesis {...props}/>}/>
