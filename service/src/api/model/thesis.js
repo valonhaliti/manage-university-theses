@@ -32,8 +32,12 @@ export default class {
   }
 
   static async listThesisByStatus(status, from, to) {
-    let query = 'SELECT id, title, description, category, filepath, status, created_date as createdDate, professor_id, student_id ';
+    let query = 'SELECT thesis.id, title, description, category, filepath, status, created_date as createdDate, professor_id, student_id, ';
+    query += ' student.firstname as studentFirstName, student.lastname as studentLastName, ';
+    query += ' mentor.firstname as mentorFirstName, mentor.lastname as mentorLastName ';
     query += 'FROM thesis LEFT JOIN thesis_to_user ON thesis.id = thesis_to_user.thesis_id ';
+    query += 'LEFT JOIN user student ON thesis_to_user.student_id = student.id ';
+    query += 'LEFT JOIN user mentor ON thesis_to_user.professor_id = mentor.id ';
     query += 'WHERE thesis.is_deleted = 0 ';
     
     let columnStatus = '';
