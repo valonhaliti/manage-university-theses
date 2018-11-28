@@ -8,7 +8,7 @@ export default class {
 
   static async get(userId) {
     const rows = await db.query(
-      'SELECT id, firstname, lastname, email, registration_year, type, department, program FROM user where is_deleted = 0 AND id = ?;', 
+      'SELECT id, firstname, lastname, email, registration_year, type, department, program, proposed_theses_list FROM user where is_deleted = 0 AND id = ?;', 
       userId);
     return rows;
   }
@@ -24,7 +24,7 @@ export default class {
   }
 
   static async listByType(type) {
-    const rows = await db.query('SELECT id, firstname, lastname, email, registration_year FROM user where is_deleted = 0 AND type = ?;', type)
+    const rows = await db.query('SELECT id, firstname, lastname, email, registration_year, proposed_theses_list FROM user where is_deleted = 0 AND type = ?;', type)
     return rows;
   }
 

@@ -209,10 +209,9 @@ class GenerateReports extends Component {
           <TableHead>
             <TableRow>
               <TableCell>Titulli</TableCell>
-              <TableCell>Abstrakti</TableCell>
-              <TableCell>Statusi</TableCell>
               <TableCell>Studenti</TableCell>
               <TableCell>Mentori</TableCell>
+              <TableCell>Statusi</TableCell>
               <TableCell>Data</TableCell>
             </TableRow>
           </TableHead>
@@ -224,10 +223,10 @@ class GenerateReports extends Component {
                 <TableCell component="th" scope="row">
                   {row.title}
                 </TableCell>
-                <TableCell>{truncateWithEllipses(row.description, 100)}</TableCell>
-                <TableCell>{statusDispayName[row.status]}</TableCell>
                 <TableCell>{`${row.studentFirstName} ${row.studentLastName}`}</TableCell>
                 <TableCell>{`${row.mentorFirstName} ${row.mentorLastName}`}</TableCell>
+                <TableCell>{statusDispayName[row.status]}</TableCell>
+
                 <TableCell>{row.status === 'e-kryer' ? moment(row.published_date).format('LL')
                 :  (row.status === 'komisioni-i-caktuar' ? moment(row.delegation_date).format('LL') :
                 moment(row.approved_by_departament_date).format('LL'))}</TableCell>

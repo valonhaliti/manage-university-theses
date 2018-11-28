@@ -1,23 +1,15 @@
 import React, { Component } from 'react';
 import Loader from '../Layout/Loader';
-import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
 import PropTypes from 'prop-types';
-import chipDataConfig from '../Theses/Thesis/chipDataConfig';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
-import FileCopy from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/Edit';
-import Delete from '@material-ui/icons/Delete';
 import Divider  from '@material-ui/core/Divider';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 import Icon from '@material-ui/core/Icon';
 import AlertDialog from '../Style/AlertDialog';
 import ThesisByUser from './ThesisByUser';
@@ -73,15 +65,6 @@ const axiosConfig = {
   headers: {
     Authorization: ''
   }
-}
-
-function getStyles(name, that) {
-  return {
-    fontWeight:
-      that.state.keywordsSelected.indexOf(name) === -1
-        ? that.props.theme.typography.fontWeightRegular
-        : that.props.theme.typography.fontWeightMedium,
-  };
 }
 
 class User extends Component {
@@ -209,7 +192,7 @@ class User extends Component {
     userId = userId && Number(userId);
     const currentUserId = localStorage.getItem('userId') && Number(localStorage.getItem('userId'));
     const {
-      displayName, type, registrationYear, email, theses,
+      displayName, type, registrationYear,
       department, program, showEditForm
     } = this.state;
     return <>

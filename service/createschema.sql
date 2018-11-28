@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `department` VARCHAR(100) NULL,
   `program` VARCHAR(100) NULL,
   `is_deleted` TINYINT NOT NULL DEFAULT 0,
+  `proposed_theses_list` JSON NULL,
   PRIMARY KEY (`id`),
   KEY `idx_user__type` (`type`),
   KEY `idx_user__email` (`email`)

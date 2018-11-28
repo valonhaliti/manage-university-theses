@@ -33,7 +33,7 @@ class Report extends Component {
   }
 
   render() {
-    const { match: { params, path } } = this.props;
+    const { match: { path } } = this.props;
     return <> 
       {path.startsWith('/kerkesaPerLejimTeTemes') ? 
       <>

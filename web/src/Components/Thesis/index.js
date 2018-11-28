@@ -24,7 +24,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import AlertDialog from '../Style/AlertDialog';
 import TextField from '@material-ui/core/TextField'
-import PrintButton from "../Reports/PrintButton";
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
@@ -207,7 +206,7 @@ class Thesis extends Component {
     const { classes, match: { params } } = this.props;
     const { thesisId } = params;
     const { 
-      title, abstract, category, created_date, status, keywords,
+      title, abstract, category, status, keywords,
       mentorId, mentorName,
       studentId, studentName,
       similarityReport, filepath, delegation_list,

@@ -202,7 +202,7 @@ class Form extends React.Component {
       fd.append('keywords', keywords);
       fd.append('professorId', this.state.thesisProffesorId);
       
-      const response = await axios.put(`/api/thesis/${thesisId}`, fd, axiosConfig);
+      await axios.put(`/api/thesis/${thesisId}`, fd, axiosConfig);
       this.setState({ 
         snackBarOpen: true,
         snackBarVariant: 'success',
