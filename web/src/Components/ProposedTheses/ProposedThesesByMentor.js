@@ -21,7 +21,6 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing.unit * 2,
-    color: green[600],
   },
   paper: {
     padding: theme.spacing.unit * 2,
@@ -68,7 +67,9 @@ const axiosConfig = {
 class ProposedThesesByMentor extends Component {
   state = {
     proposedThesesList: [],
-    thesisTitle: ''
+    thesisTitle: '',
+    mentor: {},
+    loader: true
   }
 
   handleChange = name => event => {
@@ -81,44 +82,36 @@ class ProposedThesesByMentor extends Component {
     const { match: { params } } = this.props;
     const { mentorId } = params;
     const { data: { data } } = await axios.get(`/api/user/${mentorId}`);
-    // this.setState({
-    //   proposedThesesList: data[0].proposed_theses_list && JSON.parse(data[0].proposed_theses_list)
-    // })
     this.setState({
-      proposedThesesList: [
-        {
-          title: 'Web app 1',
-          taken: false
-        },
-        {
-          title: 'Web app 2',
-          taken: false
-        },
-        {
-          title: 'Web app 3',
-          taken: true
-        },
-        {
-          title: 'Web app 4',
-          taken: false
-        },{
-          title: 'Web app 5',
-          taken: true
-        }
-      ]
-    })
+      loader: false,
+      mentor: data[0],
+      proposedThesesList: data[0].proposed_theses_list && JSON.parse(data[0].proposed_theses_list)
+    });
+    axiosConfig.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   }
 
   changeTakenThesis(idx) {
     const proposedThesesList = [...this.state.proposedThesesList];
     proposedThesesList[idx].taken = true;
-    this.setState({ proposedThesesList })
+    this.setState({ proposedThesesList }, async () => {
+      await this.update();
+      const thesisTitle = this.state.proposedThesesList[idx].title;
+      this.props.history.push(`/create/${thesisTitle}`);        
+    });
   } 
 
-  onSubmit = (e) => {
-    e.preventDefault();
+  removeProposedThesis(idx) {
+    const proposedThesesList = [...this.state.proposedThesesList];
+    proposedThesesList.splice(idx, 1);
+    this.setState({ proposedThesesList });
+  }
+
+  // Add new thesis title in proposed theses
+  onSubmit = async event => {
+    event.preventDefault();
     const proposedThesesList = [...this.state.proposedThesesList];
     
+    // Don't add duplicated titles
     for (const proposedThesis of proposedThesesList) {
       if (this.state.thesisTitle === proposedThesis.title) return;
     }
@@ -127,21 +120,38 @@ class ProposedThesesByMentor extends Component {
       title: this.state.thesisTitle,
       taken: false
     })
-    this.setState({ proposedThesesList })
+    this.setState({ proposedThesesList }, async () => await this.update());
+  }
+
+  update = async () => {
+    const { classes, match: { params } } = this.props;
+    const { mentorId } = params;
+    const updateBody = {
+      proposedThesesList: this.state.proposedThesesList && JSON.stringify(this.state.proposedThesesList)
+    };
+    console.log(updateBody);
+    try {
+      await axios.put(`/api/user/updateProposedTheses/${mentorId}`, updateBody);
+      console.log('hooray, it worked');
+    } catch (err) {
+      console.log('err');
+
+    }
   }
 
   render() {
     const { classes, match: { params } } = this.props;
+    const { firstname, lastname } = this.state.mentor;
     const { mentorId } = params;
     return <>
-      {this.state.proposedThesesList.length === 0 ? <Loader /> :
+      {this.state.loader ? <Loader /> :
       <Grid container>
-        <Grid item md={5}>        
+        <Grid item md={8} lg={5}>        
           <Paper className={classes.root}>
-            <Typography variant="h5">Temat e propozuara nga mentori</Typography>
+            <Typography variant="h5">Temat e propozuara nga {firstname} {lastname}</Typography>
             <Table>
               <TableBody>
-                  {this.state.proposedThesesList.map((proposedThesis, idx) => <TableRow>
+                  {this.state.proposedThesesList && this.state.proposedThesesList.map((proposedThesis, idx) => <TableRow>
                     <TableCell>
                     {proposedThesis.title}
                     </TableCell>
@@ -150,31 +160,41 @@ class ProposedThesesByMentor extends Component {
                       <Typography color="primary">E lirë</Typography>}
                     </TableCell>
                     <TableCell>
-                      <Button variant="outlined" onClick={() => this.changeTakenThesis(idx)}>
-                        Merre
-                      </Button>
+                      {mentorId === localStorage.getItem('userId') ? 
+                        <Button variant="outlined" onClick={() => this.removeProposedThesis(idx)}>
+                          Fshije
+                        </Button> 
+                      : 
+                        <>
+                        {!proposedThesis.taken ? <Button variant="outlined" onClick={() => this.changeTakenThesis(idx)}>
+                          Merre
+                        </Button> : 
+                        null}
+                      </>
+                      }
                     </TableCell>
                   </TableRow>)}
               </TableBody>
             </Table>
-            <form onSubmit={this.onSubmit}>
-              <TextField
-                id="outlined-name"
-                label="Shto nje propozim per teme dhe shtyp enter"
-                className={classes.textField}
-                fullWidth
-                required
-                value={this.state.thesisTitle}
-                onChange={this.handleChange('thesisTitle')}
-                margin="normal"
-                variant="outlined"
-              />
-            </form>
-            
+            {mentorId === localStorage.getItem('userId') ? 
+              <form onSubmit={this.onSubmit}>
+                <TextField
+                  id="outlined-name"
+                  label="Shto nje propozim per teme dhe shtyp enter"
+                  className={classes.textField}
+                  fullWidth
+                  required
+                  value={this.state.thesisTitle}
+                  onChange={this.handleChange('thesisTitle')}
+                  margin="normal"
+                  variant="outlined"
+                />
+              </form>
+            : null}
           </Paper>
         </Grid>
       </Grid>
-      }
+      } 
     </>
   }
 }

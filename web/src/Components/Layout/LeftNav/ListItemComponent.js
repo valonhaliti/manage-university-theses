@@ -7,6 +7,7 @@ import PendingThesesIcon from '@material-ui/icons/ThumbsUpDown';
 import ApprovedThesesIcon from '@material-ui/icons/DoneOutline';
 import PermIdentity from '@material-ui/icons/PermIdentity';
 import DoneAll from '@material-ui/icons/DoneAll';
+import Layers from '@material-ui/icons/Layers';
 import InfoIcon from '@material-ui/icons/Info';
 import FilterNone from '@material-ui/icons/FilterNone';
 import { Link } from 'react-router-dom';
@@ -27,6 +28,8 @@ const getIcon = nameOfIcon => {
       return <DoneAll />;
     case 'GenerateReport':
       return <FilterNone />;
+    case 'Layers':
+      return <Layers />;
     default:
       return null;
   }

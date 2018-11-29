@@ -36,8 +36,18 @@ const styles = theme => ({
 });
 
 class LeftNav extends Component { 
+  
+  isSelected = (pathname, listLink) => {
+    // handle special cases here
+    if (pathname.startsWith('/create') && listLink === 'create') {
+      return true;
+    }
+    return pathname === `/${listLink}`;
+  }
+
   render() {
     const { classes, location: { pathname } } = this.props;
+    console.log('zanki', this.props);
     return (
         <Drawer
           className={classes.drawer}
@@ -54,7 +64,7 @@ class LeftNav extends Component {
                 link={listItem.link}
                 text={listItem.text}
                 icon={listItem.icon}
-                isSelected={`/${listItem.link}` === pathname}
+                isSelected={this.isSelected(pathname, listItem.link)}
               />
               return <>
               {listItem.private ? (localStorage.getItem('token') ? listItemComp : null) : listItemComp}

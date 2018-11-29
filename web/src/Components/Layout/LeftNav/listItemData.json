@@ -36,7 +36,13 @@
     "listItemKey": "done-thesis",
     "link": "thesisByStatus/e-kryer",
     "icon": "DoneAll",
-    "text": "Temat e kryera",
+    "text": "Temat e kryera"
+  },
+  {
+    "listItemKey": "done-thesis",
+    "link": "proposed-theses",
+    "icon": "Layers",
+    "text": "Temat e lira",
     "divider": true
   },
   {

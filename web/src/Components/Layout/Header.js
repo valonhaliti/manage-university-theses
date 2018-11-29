@@ -130,7 +130,7 @@ class Header extends React.Component {
     this.props.history.push(`/search/${this.state.searchQuery}`);
   }  
 
-  renderMenu = (logOut) => {
+  renderMenu = logOut => {
     const { anchorEl } = this.state;
     const isMenuOpen = Boolean(anchorEl);
     
@@ -148,28 +148,33 @@ class Header extends React.Component {
     );
   }
 
+  renderMobileMenu = logOut => {
+    const { mobileMoreAnchorEl } = this.state;
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    
+    return (<Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMobileMenuOpen}
+      onClose={this.handleMobileMenuClose}
+    >
+    <MenuItem onClick={this.goToMyProfile}>
+      <IconButton color="inherit">
+        <AccountCircle />
+      </IconButton>
+      Profili
+    </MenuItem>
+    <MenuItem onClick={logOut}>Çkyçu</MenuItem>
+    </Menu>)
+  }
+    
+
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMobileMenuClose}
-      >
-      <MenuItem onClick={this.goToMyProfile}>
-        <IconButton color="inherit">
-          <AccountCircle />
-        </IconButton>
-        <p>Profili</p>
-      </MenuItem>
-      </Menu>
-    );
 
     return (
       <AuthConsumer>
@@ -217,17 +222,29 @@ class Header extends React.Component {
                     Kyçu
                   </Button>
               }
-              
             </div>
             <div className={classes.sectionMobile}>
+              { 
+                isAuth 
+                ? 
               <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
                 <MoreIcon />
               </IconButton>
+                : 
+                <Button 
+                  variant="outlined"
+                  className={classes.button}
+                  component={Link} to="/login"
+                >
+                  Kyçu
+                </Button>
+            }
+            
             </div>
           </Toolbar>
         </AppBar>
         {this.renderMenu(logOut)}
-        {renderMobileMenu}
+        {this.renderMobileMenu(logOut)}
       </div>
       )}  
       </AuthConsumer>

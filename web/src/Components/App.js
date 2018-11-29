@@ -33,6 +33,7 @@ class App extends Component {
               <Route exact path="/thesis/update/:thesisId" render={props => <UpdateThesis {...props}/>}/>
               <Route exact path="/generateReports" component={GenerateReports} />
               <PrivateRoute exact path ="/create" component={Form} />
+              <PrivateRoute exact path ="/create/:thesisTitle" component={Form} props />
               <Route exact path="/login" component={LogIn} />
               <Route exact path="/search/:searchQuery" component={ThesesSearchPage} />
               <Route exact path="/register" component={Register} />

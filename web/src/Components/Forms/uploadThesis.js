@@ -31,6 +31,10 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap'
   },
+  root: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 2,
+  },
   success: {
     backgroundColor: green[600],
   },
@@ -126,6 +130,11 @@ class Form extends React.Component {
   }
 
   async componentDidMount() {
+    const { match: { params } } = this.props;
+    const { thesisTitle } = params;
+
+    if (thesisTitle) this.setState({ thesisTitle })
+
     const mentorsResponse = await axios.get('/api/user?type=1');
     const keywords = await axios.get('/api/keyword');
     console.log({keywords: keywords.data.data});
@@ -238,132 +247,135 @@ class Form extends React.Component {
     return <>
       <Grid container>
         <Grid item sm={12} lg={6}>
-          <form className={classes.container} autoComplete="off">
-            <TextField
-              id="outlined-name"
-              label="Titulli"
-              className={classes.textField}
-              fullWidth
-              required
-              value={this.state.thesisTitle}
-              onChange={this.handleChange('thesisTitle')}
-              margin="normal"
-              variant="outlined"
-            />
-            <TextField
-              id="outlined-multiline-static"
-              label="Abstrakti"
-              multiline
-              required
-              fullWidth
-              rows="15"
-              value={this.state.thesisAbstract}
-              onChange={this.handleChange('thesisAbstract')}
-              className={classes.textField}
-              margin="normal"
-              variant="outlined"
-            />
-            <TextField
-              id="outlined-name"
-              label="Fusha"
-              className={classes.textField}
-              fullWidth
-              value={this.state.thesisCategory}              
-              onChange={this.handleChange('thesisCategory')}
-              helperText="Fusha apo kategoria, për shembull, Data Science, Web Development..."
-              margin="normal"
-              variant="outlined"
-            />
-            <FormControl required  fullWidth variant="outlined" className={classes.formControl}>
-              <InputLabel
-                ref={ref => {
-                  this.InputLabelRef = ref;
-                }}
-                htmlFor="outlined-thesisProffesorId-simple"
-              >
-                Mentori
-              </InputLabel>
-              <Select
-                value={this.state.thesisProffesorId}
-                onChange={this.handleSelectChange}
-                input={
-                  <OutlinedInput
-                    labelWidth={this.state.labelWidth}
-                    name="thesisProffesorId"
-                    id="outlined-thesisProffesorId-simple"
-                  />
-                }
-              >
-                {this.state.mentors.map(({id, displayName}) => (
-                  <MenuItem value={id}>{displayName}</MenuItem>
-                ))}
-              </Select>
-            </FormControl> 
-            
-            <FormControl fullWidth className={classes.formControl}>
-              <InputLabel htmlFor="select-multiple-chip">Fjalët kyçe</InputLabel>
-              <Select
+          <Paper className={classes.root}>
+            <form className={classes.container} autoComplete="off">
+              <TextField
+                id="outlined-name"
+                label="Titulli"
+                className={classes.textField}
+                fullWidth
+                required
+                value={this.state.thesisTitle}
+                onChange={this.handleChange('thesisTitle')}
+                margin="normal"
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-multiline-static"
+                label="Abstrakti"
+                multiline
+                required
+                fullWidth
+                rows="15"
+                value={this.state.thesisAbstract}
+                onChange={this.handleChange('thesisAbstract')}
+                className={classes.textField}
+                margin="normal"
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-name"
+                label="Fusha"
+                className={classes.textField}
+                fullWidth
+                value={this.state.thesisCategory}              
+                onChange={this.handleChange('thesisCategory')}
+                helperText="Fusha apo kategoria, për shembull, Data Science, Web Development..."
+                margin="normal"
+                variant="outlined"
+              />
+              <FormControl required  fullWidth variant="outlined" className={classes.formControl}>
+                <InputLabel
+                  ref={ref => {
+                    this.InputLabelRef = ref;
+                  }}
+                  htmlFor="outlined-thesisProffesorId-simple"
+                >
+                  Mentori
+                </InputLabel>
+                <Select
+                  value={this.state.thesisProffesorId}
+                  onChange={this.handleSelectChange}
+                  input={
+                    <OutlinedInput
+                      labelWidth={this.state.labelWidth}
+                      name="thesisProffesorId"
+                      id="outlined-thesisProffesorId-simple"
+                    />
+                  }
+                >
+                  {this.state.mentors.map(({id, displayName}) => (
+                    <MenuItem value={id}>{displayName}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl> 
+              
+              <FormControl fullWidth className={classes.formControl}>
+                <InputLabel htmlFor="select-multiple-chip">Fjalët kyçe</InputLabel>
+                <Select
+                  multiple
+                  value={this.state.keywordsSelected}
+                  onChange={this.handleChipChange}
+                  input={<Input id="select-multiple-chip" />}
+                  renderValue={selected => (
+                    <div className={classes.chips}>
+                      {selected.map(value => (
+                        <Chip key={value} label={value} className={classes.chip} />
+                      ))}
+                    </div>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {this.state.keywords.map(({id, name}) => (
+                    <MenuItem key={id} value={name} style={getStyles(name, this)}>
+                      {name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              {!this.state.newKeywords ? <MenuItem onClick={event => this.addNewKeywords(event)}>   
+                <ListItemIcon><AddIcon /></ListItemIcon>
+                <ListItemText primary="Shto fjalë kyçe të reja"/>
+              </MenuItem> : null}
+              
+              {this.state.newKeywords ? <TextField
+                id="outlined-name"
+                label="Fjalët kyçe të reja"
+                className={classes.textField}
+                fullWidth
+                value={this.state.newKeywordsString}              
+                onChange={this.handleChange('newKeywordsString')}
+                helperText='Fjalët kyçe të aplikacionit tuaj, ndani me presje. P.sh., "sistemi rekomandues, perzgjedhje e ushqimit"...'
+                margin="normal"
+                variant="outlined"
+              /> : null}
+
+              <Paper className={classes.root} elevation={1}>
+              <input
+                className={classes.input}
+                id="outlined-button-file"
+                // value={this.state.thesisFile}              
+                onChange={event => this.fileOnChange(event)}
                 multiple
-                value={this.state.keywordsSelected}
-                onChange={this.handleChipChange}
-                input={<Input id="select-multiple-chip" />}
-                renderValue={selected => (
-                  <div className={classes.chips}>
-                    {selected.map(value => (
-                      <Chip key={value} label={value} className={classes.chip} />
-                    ))}
-                  </div>
-                )}
-                MenuProps={MenuProps}
-              >
-                {this.state.keywords.map(({id, name}) => (
-                  <MenuItem key={id} value={name} style={getStyles(name, this)}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            {!this.state.newKeywords ? <MenuItem onClick={event => this.addNewKeywords(event)}>   
-              <ListItemIcon><AddIcon /></ListItemIcon>
-              <ListItemText primary="Shto fjalë kyçe të reja"/>
-            </MenuItem> : null}
-            
-            {this.state.newKeywords ? <TextField
-              id="outlined-name"
-              label="Fjalët kyçe të reja"
-              className={classes.textField}
-              fullWidth
-              value={this.state.newKeywordsString}              
-              onChange={this.handleChange('newKeywordsString')}
-              helperText='Fjalët kyçe të aplikacionit tuaj, ndani me presje. P.sh., "sistemi rekomandues, perzgjedhje e ushqimit"...'
-              margin="normal"
-              variant="outlined"
-            /> : null}
-
-            <Paper className={classes.root} elevation={1}>
-            <input
-              className={classes.input}
-              id="outlined-button-file"
-              // value={this.state.thesisFile}              
-              onChange={event => this.fileOnChange(event)}
-              multiple
-              type="file"
-            />
-            <label htmlFor="outlined-button-file">
-              <Button variant="outlined" component="span" className={classes.button}>
-                Ngarko temën
+                type="file"
+              />
+              <label htmlFor="outlined-button-file">
+                <Button variant="outlined" component="span" className={classes.button}>
+                  Ngarko temën
+                </Button>
+              </label>
+              <Typography style={{ lineHeight: '3em' }} variant='caption'>
+                {this.state.thesisFileName ? this.state.thesisFileName : 'Nuk është zgjedhur ndonjë fajl'}
+              </Typography>
+            </Paper>
+              <Button fullWidth variant="contained" color="primary" className={classes.button} onClick={this.handleClick}>
+                Dërgo
+                <Icon className={classes.rightIcon}>send</Icon>
               </Button>
-            </label>
-            <Typography style={{ lineHeight: '3em' }} variant='caption'>
-              {this.state.thesisFileName ? this.state.thesisFileName : 'Nuk është zgjedhur ndonjë fajl'}
-            </Typography>
+            </form>
           </Paper>
-            <Button fullWidth variant="contained" color="primary" className={classes.button} onClick={this.handleClick}>
-              Dërgo
-              <Icon className={classes.rightIcon}>send</Icon>
-            </Button>
-          </form>
+
         </Grid>
       </Grid>
       <Snackbar
