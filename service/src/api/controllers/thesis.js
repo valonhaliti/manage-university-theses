@@ -1,4 +1,5 @@
 import asyncHandler from '../utils/asyncHandler';
+import moment from 'moment';
 import { DATA_FETCHED_SUCCESS } from '../constants';
 import { removeFalseyValues  } from '../utils/utilFunctionsForAPIs';
 import '@babel/polyfill';
@@ -82,12 +83,25 @@ export const listThesisByStatus = asyncHandler(async (req, res, next) => {
 });
 
 export const update = asyncHandler(async (req, res, next) => {
-  const oldThesis = await thesis.get(req.params.thesisId)
+  const oldThesis = await thesis.get(req.params.thesisId);
+  
   const { statusOfThesis, datePicker } = req.body;
   let approved_by_departament_date, 
     delegation_date, 
     published_date;
   if (statusOfThesis) {
+    // Check if 3 months have passed since it got approved by department
+    const dateToBeCompared = datePicker ? moment(datePicker) : moment(); 
+    if (
+      (statusOfThesis === 'gati-per-komision' || statusOfThesis === 'komisioni-i-caktuar'|| statusOfThesis === 'e-kryer') 
+      && 
+      moment(oldThesis[0].approved_by_departament_date).add(3, 'months') > dateToBeCompared
+    ) {
+      return res.status(500).json({
+        message: "Three months should pass after it gets approved by department."
+      })      
+    }
+
     if (statusOfThesis === 'aprovuar-departamenti') {
       approved_by_departament_date = datePicker;
     } else if (statusOfThesis === 'komisioni-i-caktuar') {

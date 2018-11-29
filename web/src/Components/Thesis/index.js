@@ -29,7 +29,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-
+import Snackbar from '@material-ui/core/Snackbar';
+import MySnackbarContentWrapper from '../Forms/CostumizedSnackBars';
 
 
 const styles = theme => ({
@@ -81,7 +82,10 @@ class Thesis extends Component {
     super();
     this.state = {
       title: '',
-      astract: '',
+      astract: '',      
+      snackBarVariant: 'info',
+      snackBarMessage: '',
+      snackBarOpen: false,
       category: '',
       status: '',
       created_date: '',
@@ -102,6 +106,14 @@ class Thesis extends Component {
     }
     axiosConfig.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   }
+
+  handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ snackBarOpen: false });
+  };
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
@@ -137,6 +149,11 @@ class Thesis extends Component {
   };
 
   async componentDidMount() {
+    await this.getThesisData();    
+    this.compareThesis();
+  }
+
+  getThesisData = async () => {
     const { match: { params } } = this.props;
     const { thesisId } = params;
     const { data: { data } } = await axios.get(`/api/thesis/${thesisId}`);
@@ -159,7 +176,6 @@ class Thesis extends Component {
       keywords, filepath
     });
 
-    this.compareThesis();
   }
 
   compareThesis = async (compareAgain=false) => {
@@ -197,8 +213,15 @@ class Thesis extends Component {
         showStatusEditForm: false,
         status: this.state.statusOfThesis 
       });
+      await this.getThesisData();
     } catch (err) {
-      console.log('err trying to update status');
+      if (err.response.data.message === 'Three months should pass after it gets approved by department.') {
+        this.setState({ 
+          snackBarOpen: true,
+          snackBarVariant: 'error',
+          snackBarMessage: 'Duhet të kalojnë 3 muaj pas aprovimit të departamentin në mënyrë që të jetë e gatshme për komision.'
+        });
+      }
     }
   }
 
@@ -281,74 +304,7 @@ class Thesis extends Component {
               </Grid>
             </Grid>
             
-            {userId === mentorId ? (
-              <>
-                <Divider style={{ marginBottom: '20px' }} />
-                <Button onClick={this.showStatusEditForm} variant="outlined" size="small" className={classes.button}>
-                  <EditIcon className={classNames(classes.leftIcon, classes.iconSmall)}/>
-                  Modifikoje statusin
-                </Button>
-                {this.state.showStatusEditForm ? (
-                <form>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="statusOfThesis-simple">Statusi</InputLabel>
-                    <Select
-                      value={this.state.statusOfThesis}
-                      onChange={this.handleChange}
-                      inputProps={{
-                        name: 'statusOfThesis',
-                        id: 'statusOfThesis-simple',
-                      }}
-                    >
-                      {Object.keys(chipDataConfig).map(chip => <MenuItem value={chip}>{chipDataConfig[chip].label}</MenuItem>)}
-                    </Select>
-                    <FormControl className={classes.formControl}>
-                      {this.state.statusOfThesis === 'komisioni-i-caktuar' ?  <TextField
-                        id="outlined-name"
-                        label="Anëtarët e komisionit"
-                        className={classes.textField}
-                        fullWidth
-                        required
-                        value={this.state.delegation_list_to_update}
-                        onChange={this.handleChange}
-                        inputProps={{
-                          name: 'delegation_list_to_update',
-                          id: 'delegation_list_to_update-simple',
-                        }}
-                        margin="normal"
-                        variant="outlined"
-                      /> : null}
-                      {this.state.statusOfThesis === 'komisioni-i-caktuar' || 
-                        this.state.statusOfThesis === 'e-kryer' ||
-                        this.state.statusOfThesis === 'aprovuar-departamenti' ? <TextField
-                        id="date"
-                        label="Data"
-                        type="date"
-                        value={this.state.datePicker}
-                        onChange={this.handleChange}
-                        className={classes.textField}
-                        inputProps={{
-                          name: 'datePicker',
-                          id: 'datePicker-simple',
-                        }}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      /> : null}
-                    </FormControl>
-                    <Button 
-                      onClick={(e) => this.changeStatus(e)}
-                      fullWidth size="small" variant="contained" color="primary" className={classes.button}>
-                      Modifikoje
-                    </Button>
-                    
-                  </FormControl>
-                </form>
-                ) : null}
-                
-              </>
-              ): null}
-              {userId === studentId ? (
+              {(userId === studentId || userId === mentorId) ? (
                 <>
                 <Divider style={{ marginBottom: '20px' }} />
                 <Typography variant="h6">Statusi i temës</Typography>
@@ -422,6 +378,74 @@ class Thesis extends Component {
                 </Table>
                
                 <Divider />
+                {userId === mentorId ? (
+              <>
+                <Divider style={{ marginBottom: '20px' }} />
+                <Button onClick={this.showStatusEditForm} variant="outlined" size="small" className={classes.button}>
+                  <EditIcon className={classNames(classes.leftIcon, classes.iconSmall)}/>
+                  Modifikoje statusin
+                </Button>
+                {this.state.showStatusEditForm ? (
+                <form>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="statusOfThesis-simple">Statusi</InputLabel>
+                    <Select
+                      value={this.state.statusOfThesis}
+                      onChange={this.handleChange}
+                      inputProps={{
+                        name: 'statusOfThesis',
+                        id: 'statusOfThesis-simple',
+                      }}
+                    >
+                      {Object.keys(chipDataConfig).map(chip => <MenuItem value={chip}>{chipDataConfig[chip].label}</MenuItem>)}
+                    </Select>
+                    <FormControl className={classes.formControl}>
+                      {this.state.statusOfThesis === 'komisioni-i-caktuar' ?  <TextField
+                        id="outlined-name"
+                        label="Anëtarët e komisionit"
+                        className={classes.textField}
+                        fullWidth
+                        required
+                        value={this.state.delegation_list_to_update}
+                        onChange={this.handleChange}
+                        inputProps={{
+                          name: 'delegation_list_to_update',
+                          id: 'delegation_list_to_update-simple',
+                        }}
+                        margin="normal"
+                        variant="outlined"
+                      /> : null}
+                      {this.state.statusOfThesis === 'komisioni-i-caktuar' || 
+                        this.state.statusOfThesis === 'e-kryer' ||
+                        this.state.statusOfThesis === 'aprovuar-departamenti' ? <TextField
+                        id="date"
+                        label="Data"
+                        type="date"
+                        value={this.state.datePicker}
+                        onChange={this.handleChange}
+                        className={classes.textField}
+                        inputProps={{
+                          name: 'datePicker',
+                          id: 'datePicker-simple',
+                        }}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      /> : null}
+                    </FormControl>
+                    <Button 
+                      onClick={(e) => this.changeStatus(e)}
+                      fullWidth size="small" variant="contained" color="primary" className={classes.button}>
+                      Modifikoje
+                    </Button>
+                    
+                  </FormControl>
+                </form>
+                ) : null}
+                
+              </>
+              ): 
+              <>
                 <Button component={Link} to={`/thesis/update/${thesisId}`} variant="outlined" size="small" className={classes.button}>
                   <EditIcon className={classNames(classes.leftIcon, classes.iconSmall)}/>
                   Modifiko
@@ -430,6 +454,9 @@ class Thesis extends Component {
                   <Delete className={classNames(classes.leftIcon, classes.iconSmall)}/>
                   Fshij
                 </Button>
+              </>
+              }
+                
                 </>
               ) : null}
           </Paper>
@@ -441,6 +468,21 @@ class Thesis extends Component {
         </Grid>
       </Grid>
       <AlertDialog handleClickAlertOpen={this.handleClickAlertOpen} handleAlertClose={this.handleAlertClose}  deleteThesis={this.deleteThesis} open={this.state.agreeToDeleteDialogOpen} />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={this.state.snackBarOpen}
+        autoHideDuration={6000}
+        onClose={this.handleSnackbarClose}
+      >
+        <MySnackbarContentWrapper
+          onClose={this.handleSnackbarClose}
+          variant={this.state.snackBarVariant}
+          message={this.state.snackBarMessage}
+        />
+      </Snackbar>
     </>
   }
 }
