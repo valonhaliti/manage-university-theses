@@ -103,7 +103,7 @@ class ProposedThesesByMentor extends Component {
   removeProposedThesis(idx) {
     const proposedThesesList = [...this.state.proposedThesesList];
     proposedThesesList.splice(idx, 1);
-    this.setState({ proposedThesesList });
+    this.setState({ proposedThesesList }, async () => await this.update());
   }
 
   // Add new thesis title in proposed theses
