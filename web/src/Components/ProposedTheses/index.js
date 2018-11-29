@@ -18,21 +18,27 @@ const styles = theme => ({
 class ProposedTheses extends Component {
   state = {
     mentorsWithProposedTheses: [],
+    mentor: false,
     loader: true
   }
 
   async componentDidMount() {
     const { data: { data } } = await axios.get('/api/user?type=1');
-    this.setState({ 
+    this.setState({
+      mentor: data.some(mentor => mentor.id === (localStorage.getItem('userId') && Number(localStorage.getItem('userId')))),
       mentorsWithProposedTheses: data.filter(mentor => mentor.proposed_theses_list), 
       loader: false 
     });
   }
 
-  render() {
-    console.log('b');
+  render() {    
     const { classes } = this.props;
     return <>
+      {this.state.mentor ? 
+        <Button variant="outlined" color="primary" component={Link} to={`proposed-theses/${localStorage.getItem('userId')}`}>
+          Krijo një listë tënden
+        </Button>    
+      : null}
       {this.state.loader === 0 ? <Loader /> :
       <Grid container spacing={24}>
         {this.state.mentorsWithProposedTheses.map(mentor => <Grid item sm={12} md={6} lg={3}>
