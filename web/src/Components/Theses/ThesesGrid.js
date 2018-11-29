@@ -5,7 +5,6 @@ import Thesis from './Thesis';
 import Typography from '@material-ui/core/Typography';
 
 const filterTheses = (thesis, params, path) => {
-  console.log(params, path);
   if (params.status !== undefined) {
     return thesis.status === params.status;
   }

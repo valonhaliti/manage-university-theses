@@ -114,7 +114,6 @@ export const list = asyncHandler(async (req, res, next) => {
 });
 
 export const update = asyncHandler(async (req, res, next) => {
-  console.log(req.params);
   if (req.userData !== 'admin' && req.userData.userId !== Number(req.params.userId)) {
     return res.status(401).json({ message: 'Not authorized to update' })
   }
@@ -123,13 +122,24 @@ export const update = asyncHandler(async (req, res, next) => {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
-    registration_year: req.body.registration_year
+    registration_year: req.body.registration_year,
+    proposed_theses_list: req.body.proposedThesesList
   });
-
   await user.update(updateUser, req.params.userId);
   updateUser.id = req.params.userId;
   return res.status(201).json({ message: 'User updated with success', data: updateUser });
 });
+
+export const updateProposedThesesList = asyncHandler(async (req, res, next) => {
+  const updateUser = removeFalseyValues({
+    proposed_theses_list: req.body.proposedThesesList
+  });
+  await user.update(updateUser, req.params.userId);
+  updateUser.id = req.params.userId;
+  return res.status(201).json({ message: 'User updated with success', data: updateUser });
+});
+
+
 
 export const remove = asyncHandler(async (req, res, next) => {
   await user.delete(req.params.userId);

@@ -4,7 +4,8 @@ import { AuthConsumer } from '../AuthContext';
 
 const PrivateRouter = ({ component: Component, ...rest }) => (
   <AuthConsumer>
-    {({ isAuth }) => (
+    {({ isAuth }) => {
+      return (
       <Route {...rest} 
         render={props => (
           isAuth === true ? (
@@ -12,14 +13,14 @@ const PrivateRouter = ({ component: Component, ...rest }) => (
           ) : (
             <Redirect
               to={{
-                pathname: 'login',
+                pathname: '/login',
                 state: { from: props.location }
               }}
             />
           )
         )} 
       />
-    )}
+    )}}
   </AuthConsumer>
 );
 
