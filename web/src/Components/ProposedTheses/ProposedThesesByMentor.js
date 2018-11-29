@@ -85,7 +85,7 @@ class ProposedThesesByMentor extends Component {
     this.setState({
       loader: false,
       mentor: data[0],
-      proposedThesesList: data[0].proposed_theses_list && JSON.parse(data[0].proposed_theses_list)
+      proposedThesesList: (data[0].proposed_theses_list && JSON.parse(data[0].proposed_theses_list)) || []
     });
     axiosConfig.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   }
