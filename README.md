@@ -6,14 +6,12 @@ This project will be used by university staff and its students to manage theses 
 - Compare theses
 - See what is trending in that university
 - Professors can manage the theses of students they are mentoring etc.
-
 ### Implementation 
 - Node.js
 - - Express framework
 - MySQL
 - Mocha (for testing API)
 - React (client)
-
 ## Folder structure of repository
 This repo has two main folders: 
 - **service** - this is the Node.js backend code
