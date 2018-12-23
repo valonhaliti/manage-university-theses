@@ -4,6 +4,7 @@ import express from 'express';
 import morgan from 'morgan';
 import logger, { LoggerStream } from './api/utils/logger';
 import bodyParser from 'body-parser';
+import path from "path";
 
 import userRouter from './api/routes/user';
 import thesisRouter from './api/routes/thesis';
@@ -32,12 +33,19 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/user', userRouter);
-app.use('/thesis', thesisRouter);
-app.use('/compareTheses', compareThesesRouter);
-app.use('/keyword', keywordRouter);
-app.use('/search', searchRouter);
+app.use('/api/user', userRouter);
+app.use('/api/thesis', thesisRouter);
+app.use('/api/compareTheses', compareThesesRouter);
+app.use('/api/keyword', keywordRouter);
+app.use('/api/search', searchRouter);
 
+
+app.use('/static',
+  express.static(path.resolve('../web/build/static'))
+);
+app.use('*',
+  express.static(path.resolve('../web/build'))
+);
 
 app.use((req, res, next) => {
   const error = new Error("not found");
